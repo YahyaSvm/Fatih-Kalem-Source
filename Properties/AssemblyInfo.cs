@@ -7,7 +7,7 @@ using System.Runtime.Versioning;
 using System.Windows;
 
 [assembly: AssemblyTitle("Fatih Kalem")]
-[assembly: AssemblyDescription("Fatih Kalem 2.0 - etkileşimli tahta kalemi (YhySvm)")]
+[assembly: AssemblyDescription("Fatih Kalem 2.1 - etkileşimli tahta kalemi (YhySvm)")]
 [assembly: AssemblyCompany("Yahya Eren Sevim (YhySvm)")]
 [assembly: AssemblyProduct("Fatih Kalem")]
 [assembly: AssemblyCopyright("© 2026 Yahya Eren Sevim (YhySvm). İlk sürüm © M.E.B. 2017")]
@@ -15,6 +15,6 @@ using System.Windows;
 [assembly: ComVisible(false)]
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
 [assembly: Guid("924f2bcd-52ad-44a3-92c9-6809ef1aa16e")]
-[assembly: AssemblyFileVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("2.1.0.0")]
 [assembly: NeutralResourcesLanguage("tr-TR")]
-[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyVersion("2.1.0.0")]

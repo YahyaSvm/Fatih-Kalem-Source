@@ -353,7 +353,21 @@ def _draw(cr, name):
         cr.stroke()
 
 
+def _image_name(name):
+    return "arac-" + name.replace(":", "-")
+
+
 def draw_icon(cr, name, cx, cy, size):
+    """Önce görsel simgeyi (data/images/arac-*.png) dener; yoksa vektör çizer."""
+    from . import resources as res
+    img = _image_name(name)
+    if res.has_image(img):
+        s = size * 1.18          # görsellerde kenar boşluğu var
+        cr.save()
+        cr.new_path()
+        res.paint(cr, img, cx - s / 2.0, cy - s / 2.0, w=s, h=s)
+        cr.restore()
+        return
     cr.save()
     cr.new_path()          # önceki yazının "geçerli noktası" çizgi bırakmasın
     cr.translate(cx, cy)

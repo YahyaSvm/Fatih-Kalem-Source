@@ -3213,17 +3213,103 @@ public class MainWindow : Window, IComponentConnector
 		InitializeComponent();
 		CreateByLine();
 		SetAboutTexts();
+		CheckForUpdates();
 	}
 
 	private const string GitHubUrl = "https://github.com/YahyaSvm/Fatih-Kalem-Source";
 
+	private const string CurrentVersion = "2.1.0";
+
+	// Açılıştan sonra arka planda GitHub'daki son sürümü denetler (günde en çok bir kez).
+	private void CheckForUpdates()
+	{
+		string stateDir = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Fatih Kalem");
+		string statePath = System.IO.Path.Combine(stateDir, "guncelleme.txt");
+		string dismissed = "";
+		try
+		{
+			if (System.IO.File.Exists(statePath))
+			{
+				string[] state = System.IO.File.ReadAllLines(statePath);
+				if (state.Length > 0 && DateTime.TryParse(state[0], out DateTime last) && (DateTime.Now - last).TotalHours < 20.0)
+				{
+					return;
+				}
+				if (state.Length > 1)
+				{
+					dismissed = state[1];
+				}
+			}
+		}
+		catch (Exception)
+		{
+		}
+		System.Threading.Tasks.Task.Run(delegate
+		{
+			try
+			{
+				System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
+				string api = GitHubUrl.Replace("https://github.com/", "https://api.github.com/repos/") + "/releases/latest";
+				string json;
+				using (System.Net.WebClient client = new System.Net.WebClient())
+				{
+					client.Headers.Add("User-Agent", "FatihKalem/" + CurrentVersion);
+					client.Encoding = System.Text.Encoding.UTF8;
+					json = client.DownloadString(api);
+				}
+				System.Text.RegularExpressions.Match match = System.Text.RegularExpressions.Regex.Match(json, "\"tag_name\"\\s*:\\s*\"v?([0-9.]+)\"");
+				System.IO.Directory.CreateDirectory(stateDir);
+				System.IO.File.WriteAllLines(statePath, new string[2] { DateTime.Now.ToString("o"), dismissed });
+				if (!match.Success)
+				{
+					return;
+				}
+				string latest = match.Groups[1].Value;
+				if (!IsNewerVersion(latest, CurrentVersion) || latest == dismissed)
+				{
+					return;
+				}
+				base.Dispatcher.BeginInvoke((Action)delegate
+				{
+					MessageBoxResult answer = MessageBox.Show(this,
+						"Fatih Kalem'in yeni bir sürümü var: " + latest + "\n\nİndirme sayfası açılsın mı?",
+						"Fatih Kalem", MessageBoxButton.YesNo, MessageBoxImage.Information);
+					if (answer == MessageBoxResult.Yes)
+					{
+						Process.Start(GitHubUrl + "/releases/latest");
+					}
+					else
+					{
+						try
+						{
+							System.IO.File.WriteAllLines(statePath, new string[2] { DateTime.Now.ToString("o"), latest });
+						}
+						catch (Exception)
+						{
+						}
+					}
+				});
+			}
+			catch (Exception)
+			{
+			}
+		});
+	}
+
+	private static bool IsNewerVersion(string remote, string local)
+	{
+		Version a;
+		Version b;
+		return Version.TryParse(remote.Trim('.'), out a) && Version.TryParse(local, out b) && a > b;
+	}
+
 	// Ayarlar > Hakkında: sürüm, geliştirici ve GitHub bağlantısı.
 	private void SetAboutTexts()
 	{
-		lblVersion.Content = "Sürüm 2.0";
+		lblVersion.Content = "Sürüm 2.1";
 		lblWebLink.Content = "GitHub Sayfası";
 		textBlockAbout.Inlines.Clear();
-		textBlockAbout.Inlines.Add(new Bold(new Run("Fatih Kalem 2.0")));
+		textBlockAbout.Inlines.Add(new Bold(new Run("Fatih Kalem 2.1")));
 		textBlockAbout.Inlines.Add(new LineBreak());
 		textBlockAbout.Inlines.Add(new Run("Etkileşimli tahtalar için kalem programının yeni sürümü. Windows ve Pardus / Linux için geliştirilmektedir."));
 		textBlockAbout.Inlines.Add(new LineBreak());
