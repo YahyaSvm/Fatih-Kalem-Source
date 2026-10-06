@@ -1,277 +1,35 @@
-<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>Fatih Kalem</AssemblyName>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
     <OutputType>WinExe</OutputType>
     <UseWPF>True</UseWPF>
-    <TargetFramework>net45</TargetFramework>
-  </PropertyGroup>
-  <PropertyGroup>
+    <UseWindowsForms>False</UseWindowsForms>
+    <TargetFramework>net48</TargetFramework>
     <LangVersion>12.0</LangVersion>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <RootNamespace />
+    <NoWarn>CS0168;CS0219;CS0162;CS0164</NoWarn>
+    <EnableDefaultPageItems>false</EnableDefaultPageItems>
+    <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
   </PropertyGroup>
+
+  <!-- WPF BAML resource - embedded as Resource so WPF can find it in the standard .g.resources -->
   <ItemGroup>
-    <None Remove="resources\fatihpenlogo_wide.png" />
-    <None Remove="resources\highlighterblue.png" />
-    <None Remove="resources\gesturehighlighteryellow.png" />
-    <None Remove="resources\markerblue.png" />
-    <None Remove="resources\sidearrowright.png" />
-    <None Remove="resources\highlighternopen.png" />
-    <None Remove="resources\sidearrowleft.png" />
-    <None Remove="resources\markerwhite.png" />
-    <None Remove="resources\gesturestylographblack.png" />
-    <None Remove="resources\submenustylographright.png" />
-    <None Remove="resources\favdashline.png" />
-    <None Remove="resources\close.png" />
-    <None Remove="resources\markernopen.png" />
-    <None Remove="resources\favstylographorange.png" />
-    <None Remove="resources\favellipse.png" />
-    <None Remove="resources\highlighter.png" />
-    <None Remove="resources\gesturemarkerblack.png" />
-    <None Remove="resources\markercolorful.png" />
-    <None Remove="resources\pen.png" />
-    <None Remove="resources\favgrayedundo.png" />
-    <None Remove="resources\favrectangle.png" />
-    <None Remove="resources\size2selection.png" />
-    <None Remove="resources\size1selection.png" />
-    <None Remove="resources\fpen_icon2.ico" />
-    <None Remove="resources\fpen_icon1.ico" />
-    <None Remove="resources\favbackground.png" />
-    <None Remove="resources\favmarkernopen.png" />
-    <None Remove="resources\grayedredo.png" />
-    <None Remove="resources\stylographblue.png" />
-    <None Remove="resources\submenueraserright.png" />
-    <None Remove="resources\settings.png" />
-    <None Remove="resources\favhighlightergreen.png" />
-    <None Remove="resources\submenueraserleft.png" />
-    <None Remove="resources\highlighterred.png" />
-    <None Remove="resources\submenuhighlighterright.png" />
-    <None Remove="resources\stylographred.png" />
-    <None Remove="resources\markerorange.png" />
-    <None Remove="resources\colorselector.png" />
-    <None Remove="resources\faveraser2.png" />
-    <None Remove="resources\faveraser1.png" />
-    <None Remove="resources\faveraser4.png" />
-    <None Remove="resources\faveraser3.png" />
-    <None Remove="resources\favstylographred.png" />
-    <None Remove="splashscreen1.png" />
-    <None Remove="resources\favlibrary.png" />
-    <None Remove="resources\favgrayedredo.png" />
-    <None Remove="resources\grayedundo.png" />
-    <None Remove="resources\stylographblack.png" />
-    <None Remove="resources\gesturestylographblue.png" />
-    <None Remove="resources\stylographgreen.png" />
-    <None Remove="resources\markerred.png" />
-    <None Remove="resources\submenuhighlighterleft.png" />
-    <None Remove="resources\size6selection.png" />
-    <None Remove="resources\favstylographblue.png" />
-    <None Remove="resources\favhighlighteryellow.png" />
-    <None Remove="resources\size5selection.png" />
-    <None Remove="resources\favredo.png" />
-    <None Remove="resources\favmarkerblack.png" />
-    <None Remove="resources\submenucloseright.png" />
-    <None Remove="resources\favhighlighternopen.png" />
-    <None Remove="resources\favhighlighterred.png" />
-    <None Remove="resources\submenumarkerleft.png" />
-    <None Remove="resources\settingsgestureellipse.png" />
-    <None Remove="resources\favhighlighterblack.png" />
-    <None Remove="resources\favstylographgreen.png" />
-    <None Remove="resources\favcurtain.png" />
-    <None Remove="resources\favarrow.png" />
-    <None Remove="resources\highlighterorange.png" />
-    <None Remove="resources\favline.png" />
-    <None Remove="resources\favmarkerred.png" />
-    <None Remove="resources\gesturehighlighterblue.png" />
-    <None Remove="resources\stylographcolorful.png" />
-    <None Remove="resources\stylographwhite.png" />
-    <None Remove="resources\favstylographcolorful.png" />
-    <None Remove="resources\submenucloseleft.png" />
-    <None Remove="resources\titlebar.png" />
-    <None Remove="resources\gesturemarkerred.png" />
-    <None Remove="resources\highlightercolorful.png" />
-    <None Remove="resources\highlighterwhite.png" />
-    <None Remove="resources\minimainmenu.png" />
-    <None Remove="resources\favstylographnopen.png" />
-    <None Remove="mainwindow.baml" />
-    <None Remove="resources\gesturehighlightergreen.png" />
-    <None Remove="resources\size4selection.png" />
-    <None Remove="resources\favmarkerwhite.png" />
-    <None Remove="resources\submenushapeleft.png" />
-    <None Remove="resources\gesturemarkergreen.png" />
-    <None Remove="resources\gesturestylographred.png" />
-    <None Remove="resources\favsize6.png" />
-    <None Remove="resources\favsize4.png" />
-    <None Remove="resources\favsize5.png" />
-    <None Remove="resources\favsize2.png" />
-    <None Remove="resources\favsize3.png" />
-    <None Remove="resources\favsize1.png" />
-    <None Remove="resources\favstylographblack.png" />
-    <None Remove="resources\gesturemarkerblue.png" />
-    <None Remove="resources\gesturehighlighterred.png" />
-    <None Remove="resources\gesturestylographgreen.png" />
-    <None Remove="resources\favundo.png" />
-    <None Remove="resources\stylographorange.png" />
-    <None Remove="resources\hand.png" />
-    <None Remove="resources\favmarkerorange.png" />
-    <None Remove="resources\rotateicon.png" />
-    <None Remove="resources\submenushaperight.png" />
-    <None Remove="resources\eraser.png" />
-    <None Remove="resources\tick.png" />
-    <None Remove="resources\gestureeraser.png" />
-    <None Remove="resources\stylographnopen.png" />
-    <None Remove="resources\settingsgesturehand2finger.png" />
-    <None Remove="resources\favhighlighterwhite.png" />
-    <None Remove="resources\favmarkerblue.png" />
-    <None Remove="resources\favtriangle.png" />
-    <None Remove="resources\highlighterblack.png" />
-    <None Remove="resources\shapes.png" />
-    <None Remove="resources\highlightergreen.png" />
-    <None Remove="resources\favstylographwhite.png" />
-    <None Remove="resources\markerblack.png" />
-    <None Remove="resources\favmarkergreen.png" />
-    <None Remove="resources\favmarkercolorful.png" />
-    <None Remove="resources\size3selection.png" />
-    <None Remove="resources\markergreen.png" />
-    <None Remove="resources\favhighlightercolorful.png" />
-    <None Remove="resources\submenustylographleft.png" />
-    <None Remove="resources\submenumarkerright.png" />
-    <None Remove="resources\favhighlighterblue.png" />
-    <None Remove="resources\resizeicon.png" />
-    <EmbeddedResource Include="resources\fatihpenlogo_wide.png" LogicalName="resources/fatihpenlogo_wide.png" />
-    <EmbeddedResource Include="resources\highlighterblue.png" LogicalName="resources/highlighterblue.png" />
-    <EmbeddedResource Include="resources\gesturehighlighteryellow.png" LogicalName="resources/gesturehighlighteryellow.png" />
-    <EmbeddedResource Include="resources\markerblue.png" LogicalName="resources/markerblue.png" />
-    <EmbeddedResource Include="resources\sidearrowright.png" LogicalName="resources/sidearrowright.png" />
-    <EmbeddedResource Include="resources\highlighternopen.png" LogicalName="resources/highlighternopen.png" />
-    <EmbeddedResource Include="resources\sidearrowleft.png" LogicalName="resources/sidearrowleft.png" />
-    <EmbeddedResource Include="resources\markerwhite.png" LogicalName="resources/markerwhite.png" />
-    <EmbeddedResource Include="resources\gesturestylographblack.png" LogicalName="resources/gesturestylographblack.png" />
-    <EmbeddedResource Include="resources\submenustylographright.png" LogicalName="resources/submenustylographright.png" />
-    <EmbeddedResource Include="resources\favdashline.png" LogicalName="resources/favdashline.png" />
-    <EmbeddedResource Include="resources\close.png" LogicalName="resources/close.png" />
-    <EmbeddedResource Include="resources\markernopen.png" LogicalName="resources/markernopen.png" />
-    <EmbeddedResource Include="resources\favstylographorange.png" LogicalName="resources/favstylographorange.png" />
-    <EmbeddedResource Include="resources\favellipse.png" LogicalName="resources/favellipse.png" />
-    <EmbeddedResource Include="resources\highlighter.png" LogicalName="resources/highlighter.png" />
-    <EmbeddedResource Include="resources\gesturemarkerblack.png" LogicalName="resources/gesturemarkerblack.png" />
-    <EmbeddedResource Include="resources\markercolorful.png" LogicalName="resources/markercolorful.png" />
-    <EmbeddedResource Include="resources\pen.png" LogicalName="resources/pen.png" />
-    <EmbeddedResource Include="resources\favgrayedundo.png" LogicalName="resources/favgrayedundo.png" />
-    <EmbeddedResource Include="resources\favrectangle.png" LogicalName="resources/favrectangle.png" />
-    <EmbeddedResource Include="resources\size2selection.png" LogicalName="resources/size2selection.png" />
-    <EmbeddedResource Include="resources\size1selection.png" LogicalName="resources/size1selection.png" />
-    <EmbeddedResource Include="resources\fpen_icon2.ico" LogicalName="resources/fpen_icon2.ico" />
-    <EmbeddedResource Include="resources\fpen_icon1.ico" LogicalName="resources/fpen_icon1.ico" />
-    <EmbeddedResource Include="resources\favbackground.png" LogicalName="resources/favbackground.png" />
-    <EmbeddedResource Include="resources\favmarkernopen.png" LogicalName="resources/favmarkernopen.png" />
-    <EmbeddedResource Include="resources\grayedredo.png" LogicalName="resources/grayedredo.png" />
-    <EmbeddedResource Include="resources\stylographblue.png" LogicalName="resources/stylographblue.png" />
-    <EmbeddedResource Include="resources\submenueraserright.png" LogicalName="resources/submenueraserright.png" />
-    <EmbeddedResource Include="resources\settings.png" LogicalName="resources/settings.png" />
-    <EmbeddedResource Include="resources\favhighlightergreen.png" LogicalName="resources/favhighlightergreen.png" />
-    <EmbeddedResource Include="resources\submenueraserleft.png" LogicalName="resources/submenueraserleft.png" />
-    <EmbeddedResource Include="resources\highlighterred.png" LogicalName="resources/highlighterred.png" />
-    <EmbeddedResource Include="resources\submenuhighlighterright.png" LogicalName="resources/submenuhighlighterright.png" />
-    <EmbeddedResource Include="resources\stylographred.png" LogicalName="resources/stylographred.png" />
-    <EmbeddedResource Include="resources\markerorange.png" LogicalName="resources/markerorange.png" />
-    <EmbeddedResource Include="resources\colorselector.png" LogicalName="resources/colorselector.png" />
-    <EmbeddedResource Include="resources\faveraser2.png" LogicalName="resources/faveraser2.png" />
-    <EmbeddedResource Include="resources\faveraser1.png" LogicalName="resources/faveraser1.png" />
-    <EmbeddedResource Include="resources\faveraser4.png" LogicalName="resources/faveraser4.png" />
-    <EmbeddedResource Include="resources\faveraser3.png" LogicalName="resources/faveraser3.png" />
-    <EmbeddedResource Include="resources\favstylographred.png" LogicalName="resources/favstylographred.png" />
-    <EmbeddedResource Include="splashscreen1.png" LogicalName="splashscreen1.png" />
-    <EmbeddedResource Include="resources\favlibrary.png" LogicalName="resources/favlibrary.png" />
-    <EmbeddedResource Include="resources\favgrayedredo.png" LogicalName="resources/favgrayedredo.png" />
-    <EmbeddedResource Include="resources\grayedundo.png" LogicalName="resources/grayedundo.png" />
-    <EmbeddedResource Include="resources\stylographblack.png" LogicalName="resources/stylographblack.png" />
-    <EmbeddedResource Include="resources\gesturestylographblue.png" LogicalName="resources/gesturestylographblue.png" />
-    <EmbeddedResource Include="resources\stylographgreen.png" LogicalName="resources/stylographgreen.png" />
-    <EmbeddedResource Include="resources\markerred.png" LogicalName="resources/markerred.png" />
-    <EmbeddedResource Include="resources\submenuhighlighterleft.png" LogicalName="resources/submenuhighlighterleft.png" />
-    <EmbeddedResource Include="resources\size6selection.png" LogicalName="resources/size6selection.png" />
-    <EmbeddedResource Include="resources\favstylographblue.png" LogicalName="resources/favstylographblue.png" />
-    <EmbeddedResource Include="resources\favhighlighteryellow.png" LogicalName="resources/favhighlighteryellow.png" />
-    <EmbeddedResource Include="resources\size5selection.png" LogicalName="resources/size5selection.png" />
-    <EmbeddedResource Include="resources\favredo.png" LogicalName="resources/favredo.png" />
-    <EmbeddedResource Include="resources\favmarkerblack.png" LogicalName="resources/favmarkerblack.png" />
-    <EmbeddedResource Include="resources\submenucloseright.png" LogicalName="resources/submenucloseright.png" />
-    <EmbeddedResource Include="resources\favhighlighternopen.png" LogicalName="resources/favhighlighternopen.png" />
-    <EmbeddedResource Include="resources\favhighlighterred.png" LogicalName="resources/favhighlighterred.png" />
-    <EmbeddedResource Include="resources\submenumarkerleft.png" LogicalName="resources/submenumarkerleft.png" />
-    <EmbeddedResource Include="resources\settingsgestureellipse.png" LogicalName="resources/settingsgestureellipse.png" />
-    <EmbeddedResource Include="resources\favhighlighterblack.png" LogicalName="resources/favhighlighterblack.png" />
-    <EmbeddedResource Include="resources\favstylographgreen.png" LogicalName="resources/favstylographgreen.png" />
-    <EmbeddedResource Include="resources\favcurtain.png" LogicalName="resources/favcurtain.png" />
-    <EmbeddedResource Include="resources\favarrow.png" LogicalName="resources/favarrow.png" />
-    <EmbeddedResource Include="resources\highlighterorange.png" LogicalName="resources/highlighterorange.png" />
-    <EmbeddedResource Include="resources\favline.png" LogicalName="resources/favline.png" />
-    <EmbeddedResource Include="resources\favmarkerred.png" LogicalName="resources/favmarkerred.png" />
-    <EmbeddedResource Include="resources\gesturehighlighterblue.png" LogicalName="resources/gesturehighlighterblue.png" />
-    <EmbeddedResource Include="resources\stylographcolorful.png" LogicalName="resources/stylographcolorful.png" />
-    <EmbeddedResource Include="resources\stylographwhite.png" LogicalName="resources/stylographwhite.png" />
-    <EmbeddedResource Include="resources\favstylographcolorful.png" LogicalName="resources/favstylographcolorful.png" />
-    <EmbeddedResource Include="resources\submenucloseleft.png" LogicalName="resources/submenucloseleft.png" />
-    <EmbeddedResource Include="resources\titlebar.png" LogicalName="resources/titlebar.png" />
-    <EmbeddedResource Include="resources\gesturemarkerred.png" LogicalName="resources/gesturemarkerred.png" />
-    <EmbeddedResource Include="resources\highlightercolorful.png" LogicalName="resources/highlightercolorful.png" />
-    <EmbeddedResource Include="resources\highlighterwhite.png" LogicalName="resources/highlighterwhite.png" />
-    <EmbeddedResource Include="resources\minimainmenu.png" LogicalName="resources/minimainmenu.png" />
-    <EmbeddedResource Include="resources\favstylographnopen.png" LogicalName="resources/favstylographnopen.png" />
-    <EmbeddedResource Include="mainwindow.baml" LogicalName="mainwindow.baml" />
-    <EmbeddedResource Include="resources\gesturehighlightergreen.png" LogicalName="resources/gesturehighlightergreen.png" />
-    <EmbeddedResource Include="resources\size4selection.png" LogicalName="resources/size4selection.png" />
-    <EmbeddedResource Include="resources\favmarkerwhite.png" LogicalName="resources/favmarkerwhite.png" />
-    <EmbeddedResource Include="resources\submenushapeleft.png" LogicalName="resources/submenushapeleft.png" />
-    <EmbeddedResource Include="resources\gesturemarkergreen.png" LogicalName="resources/gesturemarkergreen.png" />
-    <EmbeddedResource Include="resources\gesturestylographred.png" LogicalName="resources/gesturestylographred.png" />
-    <EmbeddedResource Include="resources\favsize6.png" LogicalName="resources/favsize6.png" />
-    <EmbeddedResource Include="resources\favsize4.png" LogicalName="resources/favsize4.png" />
-    <EmbeddedResource Include="resources\favsize5.png" LogicalName="resources/favsize5.png" />
-    <EmbeddedResource Include="resources\favsize2.png" LogicalName="resources/favsize2.png" />
-    <EmbeddedResource Include="resources\favsize3.png" LogicalName="resources/favsize3.png" />
-    <EmbeddedResource Include="resources\favsize1.png" LogicalName="resources/favsize1.png" />
-    <EmbeddedResource Include="resources\favstylographblack.png" LogicalName="resources/favstylographblack.png" />
-    <EmbeddedResource Include="resources\gesturemarkerblue.png" LogicalName="resources/gesturemarkerblue.png" />
-    <EmbeddedResource Include="resources\gesturehighlighterred.png" LogicalName="resources/gesturehighlighterred.png" />
-    <EmbeddedResource Include="resources\gesturestylographgreen.png" LogicalName="resources/gesturestylographgreen.png" />
-    <EmbeddedResource Include="resources\favundo.png" LogicalName="resources/favundo.png" />
-    <EmbeddedResource Include="resources\stylographorange.png" LogicalName="resources/stylographorange.png" />
-    <EmbeddedResource Include="resources\hand.png" LogicalName="resources/hand.png" />
-    <EmbeddedResource Include="resources\favmarkerorange.png" LogicalName="resources/favmarkerorange.png" />
-    <EmbeddedResource Include="resources\rotateicon.png" LogicalName="resources/rotateicon.png" />
-    <EmbeddedResource Include="resources\submenushaperight.png" LogicalName="resources/submenushaperight.png" />
-    <EmbeddedResource Include="resources\eraser.png" LogicalName="resources/eraser.png" />
-    <EmbeddedResource Include="resources\tick.png" LogicalName="resources/tick.png" />
-    <EmbeddedResource Include="resources\gestureeraser.png" LogicalName="resources/gestureeraser.png" />
-    <EmbeddedResource Include="resources\stylographnopen.png" LogicalName="resources/stylographnopen.png" />
-    <EmbeddedResource Include="resources\settingsgesturehand2finger.png" LogicalName="resources/settingsgesturehand2finger.png" />
-    <EmbeddedResource Include="resources\favhighlighterwhite.png" LogicalName="resources/favhighlighterwhite.png" />
-    <EmbeddedResource Include="resources\favmarkerblue.png" LogicalName="resources/favmarkerblue.png" />
-    <EmbeddedResource Include="resources\favtriangle.png" LogicalName="resources/favtriangle.png" />
-    <EmbeddedResource Include="resources\highlighterblack.png" LogicalName="resources/highlighterblack.png" />
-    <EmbeddedResource Include="resources\shapes.png" LogicalName="resources/shapes.png" />
-    <EmbeddedResource Include="resources\highlightergreen.png" LogicalName="resources/highlightergreen.png" />
-    <EmbeddedResource Include="resources\favstylographwhite.png" LogicalName="resources/favstylographwhite.png" />
-    <EmbeddedResource Include="resources\markerblack.png" LogicalName="resources/markerblack.png" />
-    <EmbeddedResource Include="resources\favmarkergreen.png" LogicalName="resources/favmarkergreen.png" />
-    <EmbeddedResource Include="resources\favmarkercolorful.png" LogicalName="resources/favmarkercolorful.png" />
-    <EmbeddedResource Include="resources\size3selection.png" LogicalName="resources/size3selection.png" />
-    <EmbeddedResource Include="resources\markergreen.png" LogicalName="resources/markergreen.png" />
-    <EmbeddedResource Include="resources\favhighlightercolorful.png" LogicalName="resources/favhighlightercolorful.png" />
-    <EmbeddedResource Include="resources\submenustylographleft.png" LogicalName="resources/submenustylographleft.png" />
-    <EmbeddedResource Include="resources\submenumarkerright.png" LogicalName="resources/submenumarkerright.png" />
-    <EmbeddedResource Include="resources\favhighlighterblue.png" LogicalName="resources/favhighlighterblue.png" />
-    <EmbeddedResource Include="resources\resizeicon.png" LogicalName="resources/resizeicon.png" />
+    <Resource Include="mainwindow.baml" />
   </ItemGroup>
+
+  <!-- Image resources embedded in assembly -->
+  <ItemGroup>
+    <Resource Include="resources\*.png" />
+    <Resource Include="resources\*.ico" />
+    <Resource Include="splashscreen1.png" />
+  </ItemGroup>
+
+  <!-- VB.NET runtime reference -->
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
 </Project>

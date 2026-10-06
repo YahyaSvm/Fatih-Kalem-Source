@@ -1,0 +1,19 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: fatih-kalem
+Source: https://github.com/YahyaSvm/Fatih-Kalem-Source
+Comment:
+ Fatih Kalem, Fizik Öğretmeni Hasan Yunus ATEŞ tarafından Milli Eğitim
+ Bakanlığı Yenilik ve Eğitim Teknolojileri Genel Müdürlüğü (YEĞİTEK) için
+ yazılmıştır. Orijinal programın "Hakkında" metnine göre tüm hakları Milli
+ Eğitim Bakanlığına aittir ve Fatih Projesi etkileşimli tahtaları dışında
+ izinsiz kullanımı/dağıtımı yasaktır.
+ .
+ Bu paket, programın Pardus etkileşimli tahtaları (ETAP) için yeniden
+ yazılmış GTK3 sürümüdür (Fatih Kalem 2.0). Geliştiren: Yahya Eren Sevim (YhySvm).
+
+Files: *
+Copyright: Milli Eğitim Bakanlığı (orijinal program ve görseller)
+           2026 Yahya Eren Sevim (YhySvm) (Fatih Kalem 2.0)
+License: LicenseRef-MEB
+ Tüm hakları Milli Eğitim Bakanlığına aittir. Fatih Projesi Etkileşimli
+ Tahtaları haricinde izinsiz kullanımı/dağıtımı yasaktır.

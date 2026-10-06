@@ -1,0 +1,12 @@
+fatih-kalem (2.0.0) stable; urgency=medium
+
+  * Fatih Kalem 2.0: Pardus / Linux için yeniden yazılan GTK3 sürümü.
+  * Orijinal menü görselleri, renkleri, kalınlıkları ve dokunma bölgeleri
+    birebir korundu.
+  * Ana menü açıldığında en altta "By YhySvm" imzası.
+  * Pardus ETAP, GNOME (Wayland/XWayland) ve XFCE desteği; bileşikleştirici
+    olmayan masaüstlerinde ekran görüntüsü + X11 SHAPE yedek kipi.
+  * Arka plan sayfaları (beyaz, çizgili, kareli, milimetrik, noktalı, yeşil
+    ve siyah tahta) ilk açılışta ekran çözünürlüğünde üretilir.
+
+ -- Yahya Eren Sevim (YhySvm) <157166081+YahyaSvm@users.noreply.github.com>  Mon, 05 Oct 2026 12:00:00 +0300

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.CodeDom.Compiler;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Markup;
@@ -3210,8 +3211,75 @@ public class MainWindow : Window, IComponentConnector
 		FrameNoOfBackgroundPaperAdded = new int[1];
 		swQuickAccess = new Stopwatch();
 		InitializeComponent();
+		CreateByLine();
+		SetAboutTexts();
 	}
 
+	private const string GitHubUrl = "https://github.com/YahyaSvm/Fatih-Kalem-Source";
+
+	// Ayarlar > Hakkında: sürüm, geliştirici ve GitHub bağlantısı.
+	private void SetAboutTexts()
+	{
+		lblVersion.Content = "Sürüm 2.0";
+		lblWebLink.Content = "GitHub Sayfası";
+		textBlockAbout.Inlines.Clear();
+		textBlockAbout.Inlines.Add(new Bold(new Run("Fatih Kalem 2.0")));
+		textBlockAbout.Inlines.Add(new LineBreak());
+		textBlockAbout.Inlines.Add(new Run("Etkileşimli tahtalar için kalem programının yeni sürümü. Windows ve Pardus / Linux için geliştirilmektedir."));
+		textBlockAbout.Inlines.Add(new LineBreak());
+		textBlockAbout.Inlines.Add(new LineBreak());
+		textBlockAbout.Inlines.Add(new Bold(new Run("Geliştiren: Yahya Eren Sevim (YhySvm)")));
+		textBlockAbout.Inlines.Add(new LineBreak());
+		textBlockAbout.Inlines.Add(new Run("github.com/YahyaSvm/Fatih-Kalem-Source"));
+		textBlockAbout.Inlines.Add(new LineBreak());
+		textBlockAbout.Inlines.Add(new LineBreak());
+		textBlockAbout.Inlines.Add(new Run("İlk Fatih Kalem (1.0): Hasan Yunus ATEŞ, MEB YEĞİTEK.")
+		{
+			FontSize = textBlockAbout.FontSize * 0.85
+		});
+	}
+
+	private const int ByLineHeight = 16;
+
+	private TextBlock txtByLine;
+
+	// Ana menü açıldığında (büyüdüğünde) en altta görünen imza.
+	private void CreateByLine()
+	{
+		txtByLine = new TextBlock
+		{
+			Text = "By YhySvm",
+			FontSize = 8.0,
+			FontWeight = FontWeights.SemiBold,
+			TextTrimming = TextTrimming.None,
+			Foreground = new SolidColorBrush(Color.FromArgb(byte.MaxValue, 110, 110, 110)),
+			TextAlignment = TextAlignment.Center,
+			HorizontalAlignment = HorizontalAlignment.Left,
+			VerticalAlignment = VerticalAlignment.Top,
+			Height = ByLineHeight,
+			IsHitTestVisible = false,
+			Visibility = Visibility.Collapsed
+		};
+		gridMainMenu.Children.Add(txtByLine);
+	}
+
+	private void ShowByLine(bool isVisible)
+	{
+		if (txtByLine == null)
+		{
+			return;
+		}
+		if (isVisible)
+		{
+			txtByLine.Width = borderMainMenu.Width;
+			txtByLine.Margin = new Thickness(borderMainMenu.Margin.Left, borderMainMenu.Margin.Top + borderMainMenu.Height - ByLineHeight - 1.0, 0.0, 0.0);
+			txtByLine.Visibility = Visibility.Visible;
+		}
+		else
+		{
+			txtByLine.Visibility = Visibility.Collapsed;
+		}
+	}
 	private void Window_Loaded(object sender, RoutedEventArgs e)
 	{
 		int try0000_dispatch = -1;
@@ -3226,9 +3294,7 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					switch (try0000_dispatch)
+								switch (try0000_dispatch)
 					{
 					default:
 						num2 = 1;
@@ -3601,12 +3667,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 54;
 					base.Topmost = true;
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 1196;
 				continue;
 			}
@@ -3689,9 +3754,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 74;
 				continue;
 			}
@@ -3774,9 +3839,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 74;
 				continue;
 			}
@@ -3859,9 +3924,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 74;
 				continue;
 			}
@@ -3944,9 +4009,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 74;
 				continue;
 			}
@@ -4084,9 +4149,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 330;
 				continue;
 			}
@@ -4192,9 +4257,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 187;
 				continue;
 			}
@@ -4347,9 +4412,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 415;
 				continue;
 			}
@@ -4454,9 +4519,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 276;
 				continue;
 			}
@@ -4494,9 +4559,7 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					switch (try0000_dispatch)
+								switch (try0000_dispatch)
 					{
 					default:
 						num2 = 1;
@@ -4901,12 +4964,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 59;
 					tFirst = num5;
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 1882;
 				continue;
 			}
@@ -5048,9 +5110,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 504;
 				continue;
 			}
@@ -5192,9 +5254,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 525;
 				continue;
 			}
@@ -5226,9 +5288,7 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					switch (try0000_dispatch)
+								switch (try0000_dispatch)
 					{
 					default:
 						num2 = 1;
@@ -5464,12 +5524,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 33;
 					tFirst = num6;
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 1054;
 				continue;
 			}
@@ -5549,9 +5608,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 106;
 				continue;
 			}
@@ -5631,9 +5690,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 106;
 				continue;
 			}
@@ -5707,9 +5766,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 66;
 				continue;
 			}
@@ -5831,9 +5890,9 @@ public class MainWindow : Window, IComponentConnector
 					break;
 				}
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 159;
 				continue;
 			}
@@ -5934,9 +5993,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 123;
 				continue;
 			}
@@ -6019,9 +6078,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 73;
 				continue;
 			}
@@ -6104,9 +6163,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 73;
 				continue;
 			}
@@ -6189,9 +6248,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 73;
 				continue;
 			}
@@ -6269,9 +6328,7 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					switch (try0000_dispatch)
+								switch (try0000_dispatch)
 					{
 					default:
 						num2 = 1;
@@ -6584,12 +6641,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 49;
 					rectTransparent.Rect = new Rect(num5, num7, num6 - num5, num8 - num7);
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 1020;
 				continue;
 			}
@@ -6671,10 +6727,8 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					ref int[] frameNoOfErase;
-					ref StrokeCollection[] undoStrokeCollectionStack;
+								int[] frameNoOfErase = null;
+					StrokeCollection[] undoStrokeCollectionStack = null;
 					switch (try0000_dispatch)
 					{
 					default:
@@ -6780,8 +6834,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_0066;
 						IL_0066:
 						num2 = 10;
-						frameNoOfErase = ref FrameNoOfErase;
+						frameNoOfErase = FrameNoOfErase;
 						frameNoOfErase = (int[])Utils.CopyArray(frameNoOfErase, new int[iErase + 1]);
+						FrameNoOfErase = frameNoOfErase;
 						goto IL_008b;
 						IL_008b:
 						num2 = 11;
@@ -6789,8 +6844,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_00a2;
 						IL_00a2:
 						num2 = 12;
-						undoStrokeCollectionStack = ref UndoStrokeCollectionStack;
+						undoStrokeCollectionStack = UndoStrokeCollectionStack;
 						undoStrokeCollectionStack = (StrokeCollection[])Utils.CopyArray(undoStrokeCollectionStack, new StrokeCollection[iErase + 1]);
+						UndoStrokeCollectionStack = undoStrokeCollectionStack;
 						goto IL_00c9;
 						end_IL_0000_3:
 						break;
@@ -6798,12 +6854,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 14;
 					WaitForEraserMouseUp = true;
 					break;
-				}
-				end_IL_0000_2:;
+								end_IL_0000_2:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 324;
 				continue;
 			}
@@ -6879,9 +6934,7 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					bool flag;
+								bool flag;
 					switch (try0000_dispatch)
 					{
 					default:
@@ -7060,7 +7113,8 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_002f;
 						IL_002f:
 						num2 = 6;
-						borderMainMenu.Height = 223 + iFav * 42;
+						borderMainMenu.Height = 223 + iFav * 42 + ByLineHeight;
+						ShowByLine(isVisible: true);
 						goto IL_004c;
 						IL_004c:
 						num2 = 7;
@@ -7243,6 +7297,7 @@ public class MainWindow : Window, IComponentConnector
 						IL_031f:
 						num2 = 45;
 						borderMainMenu.Height = 76.0;
+						ShowByLine(isVisible: false);
 						goto IL_0336;
 						IL_0336:
 						num2 = 46;
@@ -7308,12 +7363,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 60;
 					isMinimized = true;
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 1336;
 				continue;
 			}
@@ -7484,9 +7538,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 399;
 				continue;
 			}
@@ -7777,9 +7831,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 808;
 				continue;
 			}
@@ -8022,9 +8076,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 596;
 				continue;
 			}
@@ -8179,9 +8233,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 357;
 				continue;
 			}
@@ -8317,9 +8371,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 312;
 				continue;
 			}
@@ -8957,9 +9011,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 1773;
 				continue;
 			}
@@ -9233,9 +9287,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 598;
 				continue;
 			}
@@ -10277,9 +10331,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 2847;
 				continue;
 			}
@@ -10617,9 +10671,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 765;
 				continue;
 			}
@@ -11328,9 +11382,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 2116;
 				continue;
 			}
@@ -11588,9 +11642,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 609;
 				continue;
 			}
@@ -11912,9 +11966,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 819;
 				continue;
 			}
@@ -11952,9 +12006,7 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					switch (try0000_dispatch)
+								switch (try0000_dispatch)
 					{
 					default:
 						num2 = 1;
@@ -12330,12 +12382,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 60;
 					SelectUndoImageOfFav();
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 1493;
 				continue;
 			}
@@ -12718,8 +12769,7 @@ public class MainWindow : Window, IComponentConnector
 					goto IL_057f;
 					IL_057f:
 					num2 = 65;
-					ref Stroke[] reference = ref strokeDash;
-					reference = (Stroke[])Utils.CopyArray(reference, new Stroke[num5 + 1]);
+					strokeDash = (Stroke[])Utils.CopyArray(strokeDash, new Stroke[num5 + 1]);
 					goto IL_05a1;
 					IL_05a1:
 					num2 = 66;
@@ -12832,8 +12882,7 @@ public class MainWindow : Window, IComponentConnector
 					goto IL_0300;
 					IL_0300:
 					num2 = 39;
-					ref Stroke[] reference2 = ref strokeDash;
-					reference2 = (Stroke[])Utils.CopyArray(reference2, new Stroke[num5 + 1]);
+					strokeDash = (Stroke[])Utils.CopyArray(strokeDash, new Stroke[num5 + 1]);
 					goto IL_0322;
 					IL_0322:
 					num2 = 40;
@@ -12887,9 +12936,9 @@ public class MainWindow : Window, IComponentConnector
 					goto IL_03f8;
 					end_IL_0000:;
 				}
-				catch (object obj) when (unchecked(obj is Exception && num3 != 0 && num == 0))
+				catch (Exception) when (unchecked(num3 != 0 && num == 0))
 				{
-					ProjectData.SetProjectError((Exception)obj);
+					// Error handled by On Error Resume Next
 					try0000_dispatch = 2018;
 					continue;
 				}
@@ -12933,9 +12982,7 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					switch (try0000_dispatch)
+								switch (try0000_dispatch)
 					{
 					default:
 						num2 = 1;
@@ -13253,12 +13300,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 46;
 					SelectUndoImageOfFav();
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 1029;
 				continue;
 			}
@@ -13284,9 +13330,7 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					switch (try0000_dispatch)
+								switch (try0000_dispatch)
 					{
 					default:
 						num2 = 1;
@@ -13437,12 +13481,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 19;
 					SelectUndoImageOfFav();
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 449;
 				continue;
 			}
@@ -13468,9 +13511,7 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					switch (try0000_dispatch)
+								switch (try0000_dispatch)
 					{
 					default:
 						num2 = 1;
@@ -13639,12 +13680,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 22;
 					SelectUndoImageOfFav();
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 560;
 				continue;
 			}
@@ -13670,9 +13710,7 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					switch (try0000_dispatch)
+								switch (try0000_dispatch)
 					{
 					default:
 						num2 = 1;
@@ -13956,12 +13994,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 40;
 					SelectUndoImageOfFav();
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 1003;
 				continue;
 			}
@@ -14368,20 +14405,63 @@ public class MainWindow : Window, IComponentConnector
 		AnimationFadeIn(GridCloseConfirmation, 400);
 	}
 
+	private const string RunKeyPath = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
+
+	private const string RunValueName = "Fatih Pen";
+
+	private static string ExePath => AppDomain.CurrentDomain.BaseDirectory + AppDomain.CurrentDomain.FriendlyName;
+
+	private static string AutoStartCommand => "\"" + ExePath + "\"";
+
+	private static string PreLoadCommand => "\"" + ExePath + "\" /PreLoad";
+
+	private static string ReadRunValue()
+	{
+		try
+		{
+			using RegistryKey registryKey = Registry.CurrentUser.OpenSubKey(RunKeyPath, writable: false);
+			return registryKey?.GetValue(RunValueName) as string;
+		}
+		catch (Exception)
+		{
+			return null;
+		}
+	}
+
+	private static void WriteRunValue(string value)
+	{
+		try
+		{
+			using RegistryKey registryKey = Registry.CurrentUser.CreateSubKey(RunKeyPath);
+			if (value == null)
+			{
+				registryKey?.DeleteValue(RunValueName, throwOnMissingValue: false);
+			}
+			else
+			{
+				registryKey?.SetValue(RunValueName, value);
+			}
+		}
+		catch (Exception)
+		{
+		}
+	}
+
 	private void lblSettingsMenuAutoStart_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 	{
 		ResetSettingsWindow();
 		lblSettingsAutoStart.Foreground = Brushes.DodgerBlue;
 		lblSettings.Foreground = Brushes.DodgerBlue;
 		lblSettings.Background = Brushes.GhostWhite;
-		string left = Conversions.ToString(Registry.CurrentUser.OpenSubKey("SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run", writable: false).GetValue("Fatih Pen"));
-		if (Operators.CompareString(left, AppDomain.CurrentDomain.BaseDirectory + AppDomain.CurrentDomain.FriendlyName, TextCompare: false) == 0)
+		string left = ReadRunValue();
+		// Eski sürümlerin yazdığı tırnaksız değerler de tanınır.
+		if (left == AutoStartCommand || left == ExePath)
 		{
 			chkAutoStart.IsChecked = true;
 			chkPreLoad.IsEnabled = false;
 			textChkPreLoad.Foreground = Brushes.LightGray;
 		}
-		else if (Operators.CompareString(left, AppDomain.CurrentDomain.BaseDirectory + AppDomain.CurrentDomain.FriendlyName + " /PreLoad", TextCompare: false) == 0)
+		else if (left == PreLoadCommand || left == ExePath + " /PreLoad")
 		{
 			chkPreLoad.IsChecked = true;
 		}
@@ -14390,44 +14470,28 @@ public class MainWindow : Window, IComponentConnector
 
 	private void chkAutoStart_Click(object sender, RoutedEventArgs e)
 	{
-		RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run", writable: true);
-		string value = AppDomain.CurrentDomain.BaseDirectory + AppDomain.CurrentDomain.FriendlyName;
 		if (chkAutoStart.IsChecked == true)
 		{
 			chkPreLoad.IsChecked = false;
 			chkPreLoad.IsEnabled = false;
 			textChkPreLoad.Foreground = Brushes.LightGray;
-			registryKey.SetValue("Fatih Pen", value);
+			WriteRunValue(AutoStartCommand);
 		}
 		else
 		{
 			chkPreLoad.IsEnabled = true;
 			textChkPreLoad.Foreground = new SolidColorBrush(Color.FromArgb(byte.MaxValue, 82, 82, 82));
+			WriteRunValue(null);
 		}
 	}
 
 	private void chkPreLoad_Click(object sender, RoutedEventArgs e)
 	{
-		RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run", writable: true);
-		string value = AppDomain.CurrentDomain.BaseDirectory + AppDomain.CurrentDomain.FriendlyName + " /PreLoad";
-		if (chkPreLoad.IsChecked == true)
+		if (chkAutoStart.IsChecked == true)
 		{
-			bool? isChecked = chkAutoStart.IsChecked;
-			isChecked = isChecked;
-			if (isChecked != true)
-			{
-				registryKey.SetValue("Fatih Pen", value);
-			}
+			return;
 		}
-		else
-		{
-			bool? isChecked = chkAutoStart.IsChecked;
-			isChecked = isChecked;
-			if (isChecked != true)
-			{
-				registryKey.DeleteValue("Fatih Pen", throwOnMissingValue: false);
-			}
-		}
+		WriteRunValue((chkPreLoad.IsChecked == true) ? PreLoadCommand : null);
 	}
 
 	private void lblAboutMenu_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -14441,7 +14505,7 @@ public class MainWindow : Window, IComponentConnector
 	private void lblWebLink_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 	{
 		AnimationFadeIn(RuntimeHelpers.GetObjectValue(sender), 800);
-		Process.Start("http://fatihkalem.net/fatihprojesi/fatihkalem/");
+		Process.Start(GitHubUrl);
 		imgHandAndPen_PreviewMouseLeftButtonUp(null, null);
 	}
 
@@ -14701,9 +14765,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 1027;
 				continue;
 			}
@@ -15090,9 +15154,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 1100;
 				continue;
 			}
@@ -15533,9 +15597,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 1890;
 				continue;
 			}
@@ -15627,9 +15691,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 119;
 				continue;
 			}
@@ -15667,9 +15731,7 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					switch (try0000_dispatch)
+								switch (try0000_dispatch)
 					{
 					default:
 						num2 = 1;
@@ -16074,12 +16136,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 59;
 					tFirst = num5;
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 1882;
 				continue;
 			}
@@ -16153,8 +16214,7 @@ public class MainWindow : Window, IComponentConnector
 					SelectUndoImageOfFav();
 				}
 				iAddedBackgroundPapers++;
-				ref int[] frameNoOfBackgroundPaperAdded = ref FrameNoOfBackgroundPaperAdded;
-				frameNoOfBackgroundPaperAdded = (int[])Utils.CopyArray(frameNoOfBackgroundPaperAdded, new int[iAddedBackgroundPapers + 1]);
+				FrameNoOfBackgroundPaperAdded = (int[])Utils.CopyArray(FrameNoOfBackgroundPaperAdded, new int[iAddedBackgroundPapers + 1]);
 				FrameNoOfBackgroundPaperAdded[iAddedBackgroundPapers] = (int)FrameNo;
 			}
 			catch (Exception projectError)
@@ -16284,9 +16344,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 245;
 				continue;
 			}
@@ -16408,9 +16468,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 213;
 				continue;
 			}
@@ -16541,9 +16601,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 194;
 				continue;
 			}
@@ -16570,12 +16630,10 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					ref int[] frameNoOfLibraryCollapsed;
-					ref int[] frameNoOfBackgroundCollapsed;
-					ref int[] frameNoOfErase;
-					ref StrokeCollection[] undoStrokeCollectionStack;
+								int[] frameNoOfLibraryCollapsed = null;
+					int[] frameNoOfBackgroundCollapsed = null;
+					int[] frameNoOfErase = null;
+					StrokeCollection[] undoStrokeCollectionStack = null;
 					switch (try0000_dispatch)
 					{
 					default:
@@ -16740,8 +16798,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_0087;
 						IL_0087:
 						num2 = 12;
-						frameNoOfLibraryCollapsed = ref FrameNoOfLibraryCollapsed;
+						frameNoOfLibraryCollapsed = FrameNoOfLibraryCollapsed;
 						frameNoOfLibraryCollapsed = (int[])Utils.CopyArray(frameNoOfLibraryCollapsed, new int[iCollapsedLibraries + 1]);
+						FrameNoOfLibraryCollapsed = frameNoOfLibraryCollapsed;
 						goto IL_00ae;
 						IL_00ae:
 						num2 = 13;
@@ -16768,8 +16827,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_00fd;
 						IL_00fd:
 						num2 = 18;
-						frameNoOfBackgroundCollapsed = ref FrameNoOfBackgroundCollapsed;
+						frameNoOfBackgroundCollapsed = FrameNoOfBackgroundCollapsed;
 						frameNoOfBackgroundCollapsed = (int[])Utils.CopyArray(frameNoOfBackgroundCollapsed, new int[iCollapsedBackgrounds + 1]);
+						FrameNoOfBackgroundCollapsed = frameNoOfBackgroundCollapsed;
 						goto IL_0124;
 						IL_0124:
 						num2 = 19;
@@ -16811,8 +16871,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_019d;
 						IL_019d:
 						num2 = 27;
-						frameNoOfErase = ref FrameNoOfErase;
+						frameNoOfErase = FrameNoOfErase;
 						frameNoOfErase = (int[])Utils.CopyArray(frameNoOfErase, new int[iErase + 1]);
+						FrameNoOfErase = frameNoOfErase;
 						goto IL_01c4;
 						IL_01c4:
 						num2 = 28;
@@ -16820,8 +16881,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_01de;
 						IL_01de:
 						num2 = 29;
-						undoStrokeCollectionStack = ref UndoStrokeCollectionStack;
+						undoStrokeCollectionStack = UndoStrokeCollectionStack;
 						undoStrokeCollectionStack = (StrokeCollection[])Utils.CopyArray(undoStrokeCollectionStack, new StrokeCollection[iErase + 1]);
+						UndoStrokeCollectionStack = undoStrokeCollectionStack;
 						goto IL_0205;
 						IL_0205:
 						num2 = 30;
@@ -16863,12 +16925,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 38;
 					SelectUndoImageOfFav();
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 816;
 				continue;
 			}
@@ -16963,9 +17024,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 102;
 				continue;
 			}
@@ -16995,9 +17056,7 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					switch (try0000_dispatch)
+								switch (try0000_dispatch)
 					{
 					default:
 						num2 = 1;
@@ -17081,11 +17140,10 @@ public class MainWindow : Window, IComponentConnector
 						end_IL_0000:
 						break;
 					}
-				}
-			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+							}
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 156;
 				continue;
 			}
@@ -17266,9 +17324,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj3) when (obj3 is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj3);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 301;
 				continue;
 			}
@@ -17426,9 +17484,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 255;
 				continue;
 			}
@@ -18054,9 +18112,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 1323;
 				continue;
 			}
@@ -18136,15 +18194,13 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					ref isUndoneProp[] redo;
+								isUndoneProp[] redo = null;
 					int num5;
 					int num6;
-					ref Rect[] redoStackOfAddedCurtains;
-					ref Rect[] redoStackOfRemovedCurtains;
-					ref StrokeCollection[] redoStrokeCollectionStack;
-					ref Stroke[] redoStrokeStack;
+					Rect[] redoStackOfAddedCurtains = null;
+					Rect[] redoStackOfRemovedCurtains = null;
+					StrokeCollection[] redoStrokeCollectionStack = null;
+					Stroke[] redoStrokeStack = null;
 					switch (try0000_dispatch)
 					{
 					default:
@@ -18372,8 +18428,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_004d;
 						IL_004d:
 						num2 = 9;
-						redo = ref Redo;
+						redo = Redo;
 						redo = (isUndoneProp[])Utils.CopyArray(redo, new isUndoneProp[iRedo + 1]);
+						Redo = redo;
 						goto IL_0074;
 						IL_0074:
 						num2 = 10;
@@ -18539,8 +18596,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_0337;
 						IL_0337:
 						num2 = 43;
-						redoStackOfAddedCurtains = ref RedoStackOfAddedCurtains;
+						redoStackOfAddedCurtains = RedoStackOfAddedCurtains;
 						redoStackOfAddedCurtains = (Rect[])Utils.CopyArray(redoStackOfAddedCurtains, new Rect[RedoStackOfAddedCurtains.Length + 1]);
+						RedoStackOfAddedCurtains = redoStackOfAddedCurtains;
 						goto IL_0360;
 						IL_0360:
 						num2 = 44;
@@ -18575,8 +18633,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_0416;
 						IL_0416:
 						num2 = 51;
-						redoStackOfRemovedCurtains = ref RedoStackOfRemovedCurtains;
+						redoStackOfRemovedCurtains = RedoStackOfRemovedCurtains;
 						redoStackOfRemovedCurtains = (Rect[])Utils.CopyArray(redoStackOfRemovedCurtains, new Rect[RedoStackOfRemovedCurtains.Length + 1]);
+						RedoStackOfRemovedCurtains = redoStackOfRemovedCurtains;
 						goto IL_043f;
 						IL_043f:
 						num2 = 52;
@@ -18611,8 +18670,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_04e3;
 						IL_04e3:
 						num2 = 59;
-						redoStrokeCollectionStack = ref RedoStrokeCollectionStack;
+						redoStrokeCollectionStack = RedoStrokeCollectionStack;
 						redoStrokeCollectionStack = (StrokeCollection[])Utils.CopyArray(redoStrokeCollectionStack, new StrokeCollection[RedoStrokeCollectionStack.Length + 1]);
+						RedoStrokeCollectionStack = redoStrokeCollectionStack;
 						goto IL_050c;
 						IL_050c:
 						num2 = 60;
@@ -18662,8 +18722,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_0623;
 						IL_0623:
 						num2 = 69;
-						redoStrokeStack = ref RedoStrokeStack;
+						redoStrokeStack = RedoStrokeStack;
 						redoStrokeStack = (Stroke[])Utils.CopyArray(redoStrokeStack, new Stroke[RedoStrokeStack.Length + 1]);
+						RedoStrokeStack = redoStrokeStack;
 						goto IL_064c;
 						IL_064c:
 						num2 = 70;
@@ -18720,12 +18781,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 83;
 					imgGrayedUndoLeft.Visibility = Visibility.Visible;
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 2210;
 				continue;
 			}
@@ -18753,14 +18813,12 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					int num6;
-					ref Rect[] redoStackOfRemovedCurtains;
-					ref Rect[] redoStackOfAddedCurtains;
-					ref StrokeCollection[] redoStrokeCollectionStack;
-					ref Stroke[] redoStrokeStack;
-					ref isUndoneProp[] redo;
+								int num6;
+					Rect[] redoStackOfRemovedCurtains = null;
+					Rect[] redoStackOfAddedCurtains = null;
+					StrokeCollection[] redoStrokeCollectionStack = null;
+					Stroke[] redoStrokeStack = null;
+					isUndoneProp[] redo = null;
 					switch (try0000_dispatch)
 					{
 					default:
@@ -19095,8 +19153,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_02cc;
 						IL_02cc:
 						num2 = 38;
-						redoStackOfRemovedCurtains = ref RedoStackOfRemovedCurtains;
+						redoStackOfRemovedCurtains = RedoStackOfRemovedCurtains;
 						redoStackOfRemovedCurtains = (Rect[])Utils.CopyArray(redoStackOfRemovedCurtains, new Rect[RedoStackOfRemovedCurtains.Length - 2 + 1]);
+						RedoStackOfRemovedCurtains = redoStackOfRemovedCurtains;
 						goto IL_02f7;
 						IL_02f7:
 						num2 = 39;
@@ -19119,8 +19178,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_0355;
 						IL_0355:
 						num2 = 43;
-						redoStackOfAddedCurtains = ref RedoStackOfAddedCurtains;
+						redoStackOfAddedCurtains = RedoStackOfAddedCurtains;
 						redoStackOfAddedCurtains = (Rect[])Utils.CopyArray(redoStackOfAddedCurtains, new Rect[RedoStackOfAddedCurtains.Length - 2 + 1]);
+						RedoStackOfAddedCurtains = redoStackOfAddedCurtains;
 						goto IL_0380;
 						IL_0380:
 						num2 = 44;
@@ -19150,8 +19210,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_0432;
 						IL_0432:
 						num2 = 50;
-						redoStrokeCollectionStack = ref RedoStrokeCollectionStack;
+						redoStrokeCollectionStack = RedoStrokeCollectionStack;
 						redoStrokeCollectionStack = (StrokeCollection[])Utils.CopyArray(redoStrokeCollectionStack, new StrokeCollection[RedoStrokeCollectionStack.Length - 2 + 1]);
+						RedoStrokeCollectionStack = redoStrokeCollectionStack;
 						goto IL_045d;
 						IL_03d7:
 						num2 = 47;
@@ -19174,8 +19235,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_049c;
 						IL_049c:
 						num2 = 53;
-						redoStrokeStack = ref RedoStrokeStack;
+						redoStrokeStack = RedoStrokeStack;
 						redoStrokeStack = (Stroke[])Utils.CopyArray(redoStrokeStack, new Stroke[RedoStrokeStack.Length - 2 + 1]);
+						RedoStrokeStack = redoStrokeStack;
 						goto IL_04c7;
 						IL_04c7:
 						num2 = 54;
@@ -19183,8 +19245,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_04d8;
 						IL_04d8:
 						num2 = 55;
-						redo = ref Redo;
+						redo = Redo;
 						redo = (isUndoneProp[])Utils.CopyArray(redo, new isUndoneProp[iRedo + 1]);
+						Redo = redo;
 						goto IL_04ff;
 						IL_04ff:
 						num2 = 56;
@@ -19233,12 +19296,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 67;
 					imgGrayedRedoLeft.Visibility = Visibility.Visible;
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 1705;
 				continue;
 			}
@@ -19315,9 +19377,7 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					switch (try0000_dispatch)
+								switch (try0000_dispatch)
 					{
 					default:
 						num2 = 1;
@@ -19472,12 +19532,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 20;
 					CollapseSubMenus();
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 430;
 				continue;
 			}
@@ -19503,11 +19562,9 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					DrawStateEnum drawStateBeforeAction;
-					ref Rect[] undoStackOfAddedCurtains;
-					ref int[] frameNoOfCurtainAdded;
+								DrawStateEnum drawStateBeforeAction;
+					Rect[] undoStackOfAddedCurtains = null;
+					int[] frameNoOfCurtainAdded = null;
 					switch (try0000_dispatch)
 					{
 					default:
@@ -19606,8 +19663,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_0099;
 						IL_0106:
 						num2 = 18;
-						undoStackOfAddedCurtains = ref UndoStackOfAddedCurtains;
+						undoStackOfAddedCurtains = UndoStackOfAddedCurtains;
 						undoStackOfAddedCurtains = (Rect[])Utils.CopyArray(undoStackOfAddedCurtains, new Rect[iAddedCurtains + 1]);
+						UndoStackOfAddedCurtains = undoStackOfAddedCurtains;
 						break;
 						IL_0099:
 						num2 = 12;
@@ -19631,8 +19689,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_00c8;
 						IL_00c8:
 						num2 = 16;
-						frameNoOfCurtainAdded = ref FrameNoOfCurtainAdded;
+						frameNoOfCurtainAdded = FrameNoOfCurtainAdded;
 						frameNoOfCurtainAdded = (int[])Utils.CopyArray(frameNoOfCurtainAdded, new int[iAddedCurtains + 1]);
+						FrameNoOfCurtainAdded = frameNoOfCurtainAdded;
 						goto IL_00ef;
 						end_IL_0000_2:
 						break;
@@ -19640,12 +19699,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 19;
 					UndoStackOfAddedCurtains[iAddedCurtains] = rectTransparent.Rect;
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 433;
 				continue;
 			}
@@ -19671,10 +19729,8 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					ref int[] frameNoOfCurtainRemoved;
-					ref Rect[] undoStackOfRemovedCurtains;
+								int[] frameNoOfCurtainRemoved = null;
+					Rect[] undoStackOfRemovedCurtains = null;
 					switch (try0000_dispatch)
 					{
 					default:
@@ -19773,8 +19829,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_0058;
 						IL_0058:
 						num2 = 9;
-						frameNoOfCurtainRemoved = ref FrameNoOfCurtainRemoved;
+						frameNoOfCurtainRemoved = FrameNoOfCurtainRemoved;
 						frameNoOfCurtainRemoved = (int[])Utils.CopyArray(frameNoOfCurtainRemoved, new int[iRemovedCurtains + 1]);
+						FrameNoOfCurtainRemoved = frameNoOfCurtainRemoved;
 						goto IL_007d;
 						IL_007d:
 						num2 = 10;
@@ -19782,8 +19839,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_0094;
 						IL_0094:
 						num2 = 11;
-						undoStackOfRemovedCurtains = ref UndoStackOfRemovedCurtains;
+						undoStackOfRemovedCurtains = UndoStackOfRemovedCurtains;
 						undoStackOfRemovedCurtains = (Rect[])Utils.CopyArray(undoStackOfRemovedCurtains, new Rect[iRemovedCurtains + 1]);
+						UndoStackOfRemovedCurtains = undoStackOfRemovedCurtains;
 						goto IL_00bb;
 						IL_00bb:
 						num2 = 12;
@@ -19795,12 +19853,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 14;
 					rectTransparent.Rect = new Rect(0.0, 0.0, 0.0, 0.0);
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 369;
 				continue;
 			}
@@ -19917,13 +19974,11 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					ref int[] frameNoOfLibraryItemAdded;
+								int[] frameNoOfLibraryItemAdded = null;
 					int num5;
-					ref Image[] reference;
-					ref Image[] reference2;
-					ref LibraryItemProp[] reference3;
+					Image[] reference = null;
+					Image[] reference2 = null;
+					LibraryItemProp[] reference3 = null;
 					switch (try0000_dispatch)
 					{
 					default:
@@ -20049,8 +20104,9 @@ public class MainWindow : Window, IComponentConnector
 						}
 						IL_04b6:
 						num2 = 48;
-						frameNoOfLibraryItemAdded = ref FrameNoOfLibraryItemAdded;
+						frameNoOfLibraryItemAdded = FrameNoOfLibraryItemAdded;
 						frameNoOfLibraryItemAdded = (int[])Utils.CopyArray(frameNoOfLibraryItemAdded, new int[iAddedLibraryItems + 1]);
+						FrameNoOfLibraryItemAdded = frameNoOfLibraryItemAdded;
 						break;
 						IL_000a:
 						ProjectData.ClearProjectError();
@@ -20130,8 +20186,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_016c;
 						IL_016c:
 						num2 = 19;
-						reference = ref imgLibBack;
+						reference = imgLibBack;
 						reference = (Image[])Utils.CopyArray(reference, new Image[iLibBack + 1]);
+						imgLibBack = reference;
 						goto IL_0193;
 						IL_0193:
 						num2 = 22;
@@ -20143,8 +20200,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_01c1;
 						IL_01c1:
 						num2 = 24;
-						reference2 = ref imgLibBack;
+						reference2 = imgLibBack;
 						reference2 = (Image[])Utils.CopyArray(reference2, new Image[iLibBack + 1]);
+						imgLibBack = reference2;
 						goto IL_01e8;
 						IL_01e8:
 						num2 = 25;
@@ -20200,8 +20258,9 @@ public class MainWindow : Window, IComponentConnector
 						goto IL_03af;
 						IL_03af:
 						num2 = 36;
-						reference3 = ref propImgLibBack;
+						reference3 = propImgLibBack;
 						reference3 = (LibraryItemProp[])Utils.CopyArray(reference3, new LibraryItemProp[iLibBack + 1]);
+						propImgLibBack = reference3;
 						goto IL_03d6;
 						IL_03d6:
 						num2 = 37;
@@ -20263,12 +20322,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 49;
 					FrameNoOfLibraryItemAdded[iAddedLibraryItems] = (int)FrameNo;
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 1489;
 				continue;
 			}
@@ -20452,9 +20510,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 167;
 				continue;
 			}
@@ -20572,9 +20630,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 284;
 				continue;
 			}
@@ -20790,9 +20848,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 563;
 				continue;
 			}
@@ -20961,9 +21019,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 600;
 				continue;
 			}
@@ -21117,9 +21175,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 366;
 				continue;
 			}
@@ -21151,9 +21209,7 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					int num5;
+								int num5;
 					switch (try0000_dispatch)
 					{
 					default:
@@ -21379,12 +21435,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 31;
 					imgClose.Margin = new Thickness(imgClose.Margin.Left, imgClose.Margin.Top + 42.0, 0.0, 0.0);
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 1163;
 				continue;
 			}
@@ -21412,9 +21467,7 @@ public class MainWindow : Window, IComponentConnector
 			try
 			{
 				/*Note: ILSpy has introduced the following switch to emulate a goto from catch-block to try-block*/;
-				checked
-				{
-					int num5;
+								int num5;
 					switch (try0000_dispatch)
 					{
 					default:
@@ -21586,12 +21639,11 @@ public class MainWindow : Window, IComponentConnector
 					num2 = 21;
 					imgClose.Margin = new Thickness(imgClose.Margin.Left, imgClose.Margin.Top - 42.0, 0.0, 0.0);
 					break;
-				}
-				end_IL_0000:;
+								end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 810;
 				continue;
 			}
@@ -23320,9 +23372,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 5993;
 				continue;
 			}
@@ -23712,9 +23764,9 @@ public class MainWindow : Window, IComponentConnector
 				break;
 				end_IL_0000:;
 			}
-			catch (object obj) when (obj is Exception && num3 != 0 && num == 0)
+			catch (Exception) when (num3 != 0 && num == 0)
 			{
-				ProjectData.SetProjectError((Exception)obj);
+				// Error handled by On Error Resume Next
 				try0000_dispatch = 1103;
 				continue;
 			}

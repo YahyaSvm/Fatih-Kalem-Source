@@ -1,0 +1,8 @@
+/bin/
+/obj/
+/dist/
+__pycache__/
+*.pyc
+docs/ANALIZ_RAPORU.md
+tools/
+linux/build/

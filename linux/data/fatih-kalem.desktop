@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Fatih Kalem
+Name[tr]=Fatih Kalem
+GenericName=Interactive Whiteboard Pen
+GenericName[tr]=Etkileşimli Tahta Kalemi
+Comment=Draw on top of any application on interactive whiteboards
+Comment[tr]=Etkileşimli tahtada ekrandaki her şeyin üzerine yazın ve çizin
+Exec=fatih-kalem
+Icon=fatih-kalem
+Terminal=false
+Categories=Education;Graphics;
+Keywords=pen;whiteboard;draw;annotate;fatih;etap;
+Keywords[tr]=kalem;tahta;çizim;yazı;fatih;etap;akıllı tahta;
+StartupNotify=false
+SingleMainWindow=true
+X-GNOME-UsesNotifications=false

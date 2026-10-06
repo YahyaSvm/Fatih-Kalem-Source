@@ -1,0 +1,20 @@
+#!/bin/sh
+# Fatih Kalem başlatıcısı (Pardus / Linux)
+#
+# Program dosyaları /usr/share/fatih-kalem altındadır. Wayland oturumunda
+# (Pardus GNOME 23/25, ETAP) her zaman üstte duran saydam kaplama penceresi
+# için XWayland kullanılır; X11 oturumunda doğrudan X11 kullanılır.
+PREFIX_SHARE="${FATIHKALEM_PREFIX:-/usr/share/fatih-kalem}"
+
+if [ -n "$DISPLAY" ] && [ "$FATIHKALEM_NATIVE_WAYLAND" != "1" ]; then
+    GDK_BACKEND=x11
+    export GDK_BACKEND
+fi
+
+# Erişilebilirlik köprüsü ilk açılışı yavaşlatır; kalem için gerekmez.
+NO_AT_BRIDGE=1
+export NO_AT_BRIDGE
+
+PYTHONPATH="$PREFIX_SHARE${PYTHONPATH:+:$PYTHONPATH}"
+export PYTHONPATH
+exec python3 -m fatihkalem "$@"

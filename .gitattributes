@@ -1,0 +1,3 @@
+linux/** text eol=lf
+linux/**/*.png binary
+linux/**/*.ico binary

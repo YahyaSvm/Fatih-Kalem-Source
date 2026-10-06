@@ -1,0 +1,10 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+override_dh_auto_install:
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/fatih-kalem PREFIX=/usr
+
+override_dh_auto_test:
+	# Testler pytest gerektirir; paket derlemesinde çalıştırılmaz.
