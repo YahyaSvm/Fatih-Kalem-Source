@@ -299,12 +299,68 @@ Fatih-Kalem-Source/
 
 ## Yol Haritası
 
+### Tamamlananlar (2.0)
+- [x] Pardus / ETAP sürümü ve `.deb` paketi
+- [x] İki parmak jestleri, kalem basıncı, silgi ucu
+- [x] HiDPI / 4K ekran desteği
+- [x] Yeni arka plan sayfaları
+- [x] Windows geri al / yinele ve otomatik başlatma düzeltmeleri
+- [x] Otomatik derleme ve sürüm yayınlama
+
+### Çizim araçları
+- [ ] Metin kutusu (klavye ve ekran klavyesiyle yazı ekleme)
+- [ ] Seçme aracı: çizimleri seçip taşıma, büyütme, döndürme, silme
+- [ ] Şekil tanıma: elle çizilen daireyi, kareyi, çizgiyi düzgün şekle çevirme
+- [ ] Dolgu: kapalı şekillerin içini renkle doldurma
+- [ ] Lazer işaretçi (birkaç saniye sonra kaybolan iz)
+- [ ] Kaybolan mürekkep: anlatım sırasında kendiliğinden silinen kalem
+- [ ] Nokta ve kesikli kalem tipi, ok uçlu serbest çizgi
+- [ ] Yumuşatılmış el yazısı (titrek çizgileri düzeltme)
+- [ ] Son kullanılan renkler ve kendi renk paletini kaydetme
+- [ ] Tümünü sil düğmesi (onaylı)
+
+### Ders araçları
+- [ ] Cetvel, gönye, iletki ve pergel
+- [ ] Koordinat düzlemi, sayı doğrusu ve geometri ızgaraları
+- [ ] Spot ışığı (yalnızca dairesel bir alanı gösterme)
+- [ ] Büyüteç (ekranın bir bölümünü yakınlaştırma)
+- [ ] Sayaç ve kronometre
+- [ ] Kura / rastgele öğrenci seçici
+- [ ] Hazır şablonlar: dört çizgili defter (ilkokul yazı), müzik portesi, harita
+- [ ] Ekran görüntüsü alıp üzerine yazma
+
+### Sayfa ve kaydetme
+- [ ] Çok sayfalı tahta (sayfa ekle, sayfalar arasında geçiş)
+- [ ] Çizimleri PNG ve PDF olarak kaydetme
+- [ ] Dersi kaydedip sonraki derste kaldığı yerden açma
+- [ ] Tüm sayfaları tek PDF olarak dışa aktarma ve USB belleğe kaydetme
+- [ ] QR kod ile öğrencilerle paylaşma
+
+### Pardus / ETAP
 - [ ] Pardus Yazılım Merkezi'nde yer alma
-- [ ] Çizimleri resim (PNG) ve PDF olarak kaydetme
-- [ ] Çok sayfalı tahta (sayfa ekle / sayfalar arası geçiş)
-- [ ] Cetvel, gönye ve iletki araçları
-- [ ] Çoklu ekran desteğinin geliştirilmesi
+- [ ] Pardus deposuna paket olarak girme (`apt install fatih-kalem`)
+- [ ] ETAP ekran klavyesi ve tahta araçlarıyla uyum
+- [ ] Ders zili / oturum kapanışında çizimleri otomatik kaydetme
+- [ ] Yönetici için toplu kurulum ve ortak ayar dosyası (`/etc/fatih-kalem`)
+- [ ] Wayland'de XWayland olmadan doğrudan çalışma
+- [ ] Çoklu ekran desteğinin geliştirilmesi (tahta + projeksiyon)
+
+### Windows
 - [ ] Windows sürümünün de aynı kod tabanına taşınması
+- [ ] Kurulum sihirbazı (`.msi` / `.exe`) ve otomatik güncelleme
+- [ ] Yüksek DPI ölçekleme iyileştirmeleri
+
+### Erişilebilirlik ve dil
+- [ ] Menü boyutunu büyütme seçeneği (küçük öğrenciler ve uzak mesafe için)
+- [ ] Sol el kullanımına uygun menü yerleşimi
+- [ ] Renk körlüğüne uygun palet
+- [ ] İngilizce ve diğer dillerde arayüz
+
+### Altyapı
+- [ ] Ayarların tahtalar arasında dışa / içe aktarılması
+- [ ] Hata raporunu tek tıkla oluşturma
+- [ ] Ekran üzerinde otomatik arayüz testleri
+- [ ] Performans: binlerce çizgide akıcı çizim
 
 Öneriniz mi var? [Bir öneri kaydı açın](https://github.com/YahyaSvm/Fatih-Kalem-Source/issues/new).
 
