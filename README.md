@@ -2,7 +2,7 @@
 
 <img src="linux/data/icons/256.png" width="110" alt="Fatih Kalem logosu">
 
-# Fatih Kalem 2.0
+# Fatih Kalem 2.1
 
 ### Etkileşimli tahtalar için ekran kalemi
 
@@ -23,7 +23,7 @@ Ekrandaki her şeyin (e-kitap, sunum, video, tarayıcı) üzerine yazın, çizin
 
 <br>
 
-<img src="docs/images/ekran-kalem.png" width="860" alt="Fatih Kalem 2.0 — kareli sayfa üzerinde çizim ve açık kalem menüsü">
+<img src="docs/images/ekran-kalem.png" width="860" alt="Fatih Kalem — kareli sayfa üzerinde çizim ve açık kalem menüsü">
 
 </div>
 
@@ -31,7 +31,7 @@ Ekrandaki her şeyin (e-kitap, sunum, video, tarayıcı) üzerine yazın, çizin
 
 ## İçindekiler
 
-- [Neden Fatih Kalem 2.0?](#neden-fatih-kalem-20)
+- [Neden Fatih Kalem 2?](#neden-fatih-kalem-2)
 - [Özellikler](#özellikler)
 - [Ekran Görüntüleri](#ekran-görüntüleri)
 - [Platform Desteği](#platform-desteği)
@@ -46,11 +46,11 @@ Ekrandaki her şeyin (e-kitap, sunum, video, tarayıcı) üzerine yazın, çizin
 
 ---
 
-## Neden Fatih Kalem 2.0?
+## Neden Fatih Kalem 2?
 
 Okullardaki etkileşimli tahtalar artık büyük ölçüde **Pardus ETAP** ile çalışıyor,
-ancak öğretmenlerin alıştığı Fatih Kalem yalnızca Windows'ta vardı. 2.0 sürümü bu
-boşluğu kapatır:
+ancak öğretmenlerin alıştığı Fatih Kalem yalnızca Windows'ta vardı. Fatih Kalem 2 bu
+boşluğu kapatır ve tahtaya yeni ders araçları getirir:
 
 - **Aynı arayüz, her iki sistemde.** Menü, simgeler, renkler ve dokunma noktaları
   Windows ve Pardus'ta birebir aynıdır; öğretmenin yeniden öğrenmesi gereken bir şey yoktur.
@@ -103,13 +103,31 @@ boşluğu kapatır:
 </tr>
 </table>
 
+#### 🧰 Araçlar menüsü (2.1 · Pardus / Linux)
+
+| | |
+|---|---|
+| **Kalem çeşitleri** | Normal, kesikli, noktalı ve oklu kalem · el yazısını yumuşatma |
+| **Şekil tanıma** | Elle çizilen çizgi, daire, üçgen ve dikdörtgen düzgün şekle dönüşür |
+| **Seç ve düzenle** | Kementle seç; taşı, büyüt, kopyala, sil |
+| **Metin** | Ekrana yazı ekleme ve düzenleme |
+| **Lazer ve kaybolan kalem** | Anlatırken iz bırakmadan gösterme |
+| **Dolgu** | Kapalı şekillerin içini boyama |
+| **Ölçme araçları** | Cetvel, gönye, iletki, pergel — kalem cetvelin kenarına yapışır |
+| **Sınıf araçları** | Spot ışığı, büyüteç, sayaç / kronometre, kura çekme |
+| **Sayfalar** | Çok sayfalı tahta; ekran görüntüsünü sayfa yapıp üzerine yazma |
+| **Kaydet ve paylaş** | PNG, çok sayfalı PDF, `.fkalem` ders dosyası; QR kodla telefona gönderme |
+| **Şablonlar** | Dört çizgili defter, müzik portesi, koordinat düzlemi, sayı doğrusu, izometrik kâğıt |
+| **Renkler** | Son kullanılan renkler ve kendi paletiniz; renk körlüğüne uygun palet |
+
 ## Ekran Görüntüleri
 
 <table>
 <tr>
-<td align="center" width="22%"><img src="docs/images/menu.png" height="250" alt="Ana menü"><br><sub><b>Ana menü</b></sub></td>
-<td align="center" width="34%"><img src="docs/images/ekran-jest.png" height="250" alt="İki parmak jesti"><br><sub><b>İki parmak jesti</b></sub></td>
-<td align="center" width="44%"><img src="docs/images/hakkinda-pardus.png" height="250" alt="Ayarlar ve Hakkında (Pardus)"><br><sub><b>Ayarlar (Pardus)</b></sub></td>
+<td align="center" width="14%"><img src="docs/images/menu.png" height="250" alt="Ana menü"><br><sub><b>Ana menü</b></sub></td>
+<td align="center" width="26%"><img src="docs/images/araclar.png" height="250" alt="Araçlar menüsü"><br><sub><b>Araçlar menüsü</b></sub></td>
+<td align="center" width="26%"><img src="docs/images/ekran-jest.png" height="250" alt="İki parmak jesti"><br><sub><b>İki parmak jesti</b></sub></td>
+<td align="center" width="34%"><img src="docs/images/hakkinda-pardus.png" height="250" alt="Ayarlar ve Hakkında (Pardus)"><br><sub><b>Ayarlar</b></sub></td>
 </tr>
 </table>
 
@@ -121,8 +139,8 @@ boşluğu kapatır:
 | Pardus 25 / 23 | GNOME (Wayland / X11), XFCE | ✅ Destekleniyor | `.deb` |
 | Pardus 21 / ETAP 19–21 | XFCE | 🧪 Deneysel | `.deb` |
 | Debian 11+ / Ubuntu 22.04+ | GNOME, XFCE, Cinnamon, MATE | 🧪 Deneysel | `.deb` |
-| Windows 10 / 11 | — | ✅ Destekleniyor | `.zip` |
-| Windows 7 / 8.1 | — | ⚠️ .NET Framework 4.8 gerekir | `.zip` |
+| Windows 10 / 11 | — | ✅ Destekleniyor | `.exe` kurulum · `.zip` |
+| Windows 7 / 8.1 | — | ⚠️ .NET Framework 4.8 gerekir | `.exe` kurulum · `.zip` |
 
 > **Wayland:** GNOME Wayland oturumlarında program otomatik olarak XWayland üzerinden
 > açılır; ek ayar gerekmez. <br>
@@ -135,19 +153,19 @@ En güncel dosyalar **[Releases](https://github.com/YahyaSvm/Fatih-Kalem-Source/
 
 ### Pardus / ETAP
 
-**Grafik arayüzle:** `fatih-kalem_2.0.0_all.deb` dosyasına çift tıklayın ve **Yükle**'ye basın.
+**Grafik arayüzle:** `fatih-kalem_2.1.0_all.deb` dosyasına çift tıklayın ve **Yükle**'ye basın.
 
 **Uçbirimle:**
 
 ```bash
-sudo apt install ./fatih-kalem_2.0.0_all.deb
+sudo apt install ./fatih-kalem_2.1.0_all.deb
 ```
 
 **İnternet bağlantılı tahtada tek komutla:**
 
 ```bash
-wget https://github.com/YahyaSvm/Fatih-Kalem-Source/releases/download/v2.0.0/fatih-kalem_2.0.0_all.deb \
-  && sudo apt install ./fatih-kalem_2.0.0_all.deb
+wget https://github.com/YahyaSvm/Fatih-Kalem-Source/releases/download/v2.1.0/fatih-kalem_2.1.0_all.deb \
+  && sudo apt install ./fatih-kalem_2.1.0_all.deb
 ```
 
 Kurulumdan sonra program **Uygulamalar → Eğitim → Fatih Kalem** altında yer alır.
@@ -184,10 +202,14 @@ Wayland, saydamlık, dokunmatik kalibrasyon ve sorun giderme ayrıntıları içi
 
 ### Windows
 
-1. `FatihKalem-2.0.0-windows.zip` dosyasını indirip bir klasöre açın.
-2. `Fatih Kalem.exe` dosyasını çalıştırın.
+**Kurulum sihirbazıyla (önerilen):** `FatihKalem-2.1.0-kurulum.exe` dosyasını çalıştırın.
+Yönetici yetkisi gerekmez; isteğe bağlı masaüstü kısayolu ve açılışta başlatma seçenekleri vardır.
 
-.NET Framework 4.8 gerekir (Windows 10 ve 11'de hazır gelir).
+**Taşınabilir:** `FatihKalem-2.1.0-windows.zip` dosyasını bir klasöre açıp `Fatih Kalem.exe`
+dosyasını çalıştırın.
+
+.NET Framework 4.8 gerekir (Windows 10 ve 11'de hazır gelir). Yeni sürüm çıktığında
+program sizi bilgilendirir.
 
 ## Kullanım
 
@@ -198,7 +220,8 @@ Wayland, saydamlık, dokunmatik kalibrasyon ve sorun giderme ayrıntıları içi
 | **Kalem** | Kalem tipi, renk, kartela, kalemsiz mod ve kalınlık. |
 | **Silgi** | Geri al, yinele, perde ve dört silgi boyutu. |
 | **Şekiller** | Altı şekil, görsel kütüphanesi ve arka plan sayfaları. |
-| **⚙ Ayarlar** | Başlangıç kalemi ve konumu, sık kullanılanlar, hızlı erişim, otomatik başlatma. |
+| **Araçlar** | Ölçme araçları, seçme, metin, lazer, sayfalar, kaydetme ve paylaşma (Pardus / Linux). |
+| **⚙ Ayarlar** | Başlangıç kalemi ve konumu, sık kullanılanlar, hızlı erişim, otomatik başlatma, görünüm (dil, menü boyutu, sol el), gelişmiş. |
 | **✕ Kapat** | Programı kapatır (isteğe bağlı onayla). |
 
 **İki parmak jestleri** — bir parmak tahtadayken ikinci parmağı koyup çekin:
@@ -288,79 +311,55 @@ Fatih-Kalem-Source/
 │   │   ├── window.py       tam ekran kalem penceresi, dokunma ve jestler
 │   │   ├── toolbar.py      menü yerleşimi ve dokunma bölgeleri
 │   │   ├── ink.py          mürekkep, kalem uçları, noktasal silgi
-│   │   ├── scene.py        sahne ve geri al / yinele
+│   │   ├── scene.py        sahne, sayfalar ve geri al / yinele
+│   │   ├── features.py     Araçlar menüsünün komutları
+│   │   ├── tools.py        cetvel, gönye, iletki, pergel, spot, büyüteç, sayaç
+│   │   ├── recognize.py    şekil tanıma, yumuşatma, kesikli / oklu kalem
+│   │   ├── lesson.py       ders dosyası, PNG / PDF, otomatik kayıt
+│   │   ├── qr.py           QR kod üretici
 │   │   └── ...
 │   ├── debian/             Debian / Pardus paket tanımı
 │   ├── packaging/          .deb üretim betiği
 │   └── tests/              birim testleri
+├── installer/              Windows kurulum sihirbazı (Inno Setup)
 ├── docs/images/            ekran görüntüleri
 └── .github/workflows/      otomatik derleme ve sürüm yayınlama
 ```
 
 ## Yol Haritası
 
-### Tamamlananlar (2.0)
+### ✅ 2.0
 - [x] Pardus / ETAP sürümü ve `.deb` paketi
 - [x] İki parmak jestleri, kalem basıncı, silgi ucu
-- [x] HiDPI / 4K ekran desteği
-- [x] Yeni arka plan sayfaları
+- [x] HiDPI / 4K ekran desteği ve yeni arka plan sayfaları
 - [x] Windows geri al / yinele ve otomatik başlatma düzeltmeleri
 - [x] Otomatik derleme ve sürüm yayınlama
 
-### Çizim araçları
-- [ ] Metin kutusu (klavye ve ekran klavyesiyle yazı ekleme)
-- [ ] Seçme aracı: çizimleri seçip taşıma, büyütme, döndürme, silme
-- [ ] Şekil tanıma: elle çizilen daireyi, kareyi, çizgiyi düzgün şekle çevirme
-- [ ] Dolgu: kapalı şekillerin içini renkle doldurma
-- [ ] Lazer işaretçi (birkaç saniye sonra kaybolan iz)
-- [ ] Kaybolan mürekkep: anlatım sırasında kendiliğinden silinen kalem
-- [ ] Nokta ve kesikli kalem tipi, ok uçlu serbest çizgi
-- [ ] Yumuşatılmış el yazısı (titrek çizgileri düzeltme)
-- [ ] Son kullanılan renkler ve kendi renk paletini kaydetme
-- [ ] Tümünü sil düğmesi (onaylı)
+### ✅ 2.1
+- [x] Metin kutusu, seçme aracı, şekil tanıma, dolgu
+- [x] Lazer işaretçi, kaybolan kalem, kesikli / noktalı / oklu kalem, el yazısı yumuşatma
+- [x] Son kullanılan renkler, kendi renk paleti, onaylı tümünü temizle
+- [x] Cetvel, gönye, iletki, pergel
+- [x] Spot ışığı, büyüteç, sayaç / kronometre, kura
+- [x] Dört çizgili defter, müzik portesi, koordinat düzlemi, sayı doğrusu, izometrik kâğıt
+- [x] Ekran görüntüsünü sayfa yapıp üzerine yazma
+- [x] Çok sayfalı tahta; PNG, PDF ve `.fkalem` ders dosyası; USB'ye kaydetme
+- [x] QR kodla öğrencilerle paylaşma
+- [x] Otomatik kayıt (her dakika, el moduna dönerken ve tahta kapanırken)
+- [x] Okul yöneticileri için ortak ayar dosyası (`/etc/fatih-kalem/ayarlar.json`)
+- [x] Çoklu ekran seçimi
+- [x] Windows kurulum sihirbazı, güncelleme bildirimi, ekran başına yüksek DPI
+- [x] Menü boyutu, sol el yerleşimi, renk körlüğü paleti, İngilizce arayüz
+- [x] Ayarları dışa / içe aktarma, tek tıkla hata raporu
+- [x] Sanal ekranda otomatik arayüz testleri, uzun çizgilerde hızlandırma
 
-### Ders araçları
-- [ ] Cetvel, gönye, iletki ve pergel
-- [ ] Koordinat düzlemi, sayı doğrusu ve geometri ızgaraları
-- [ ] Spot ışığı (yalnızca dairesel bir alanı gösterme)
-- [ ] Büyüteç (ekranın bir bölümünü yakınlaştırma)
-- [ ] Sayaç ve kronometre
-- [ ] Kura / rastgele öğrenci seçici
-- [ ] Hazır şablonlar: dört çizgili defter (ilkokul yazı), müzik portesi, harita
-- [ ] Ekran görüntüsü alıp üzerine yazma
-
-### Sayfa ve kaydetme
-- [ ] Çok sayfalı tahta (sayfa ekle, sayfalar arasında geçiş)
-- [ ] Çizimleri PNG ve PDF olarak kaydetme
-- [ ] Dersi kaydedip sonraki derste kaldığı yerden açma
-- [ ] Tüm sayfaları tek PDF olarak dışa aktarma ve USB belleğe kaydetme
-- [ ] QR kod ile öğrencilerle paylaşma
-
-### Pardus / ETAP
-- [ ] Pardus Yazılım Merkezi'nde yer alma
-- [ ] Pardus deposuna paket olarak girme (`apt install fatih-kalem`)
-- [ ] ETAP ekran klavyesi ve tahta araçlarıyla uyum
-- [ ] Ders zili / oturum kapanışında çizimleri otomatik kaydetme
-- [ ] Yönetici için toplu kurulum ve ortak ayar dosyası (`/etc/fatih-kalem`)
+### 🔜 Sırada
+- [ ] Pardus Yazılım Merkezi'nde yer alma ve Pardus deposuna girme (`apt install fatih-kalem`)
+- [ ] ETAP ekran klavyesi ve tahta araçlarıyla uyumun farklı tahtalarda doğrulanması
 - [ ] Wayland'de XWayland olmadan doğrudan çalışma
-- [ ] Çoklu ekran desteğinin geliştirilmesi (tahta + projeksiyon)
-
-### Windows
-- [ ] Windows sürümünün de aynı kod tabanına taşınması
-- [ ] Kurulum sihirbazı (`.msi` / `.exe`) ve otomatik güncelleme
-- [ ] Yüksek DPI ölçekleme iyileştirmeleri
-
-### Erişilebilirlik ve dil
-- [ ] Menü boyutunu büyütme seçeneği (küçük öğrenciler ve uzak mesafe için)
-- [ ] Sol el kullanımına uygun menü yerleşimi
-- [ ] Renk körlüğüne uygun palet
-- [ ] İngilizce ve diğer dillerde arayüz
-
-### Altyapı
-- [ ] Ayarların tahtalar arasında dışa / içe aktarılması
-- [ ] Hata raporunu tek tıkla oluşturma
-- [ ] Ekran üzerinde otomatik arayüz testleri
-- [ ] Performans: binlerce çizgide akıcı çizim
+- [ ] Araçlar menüsünün Windows sürümüne de gelmesi (tek kod tabanı)
+- [ ] Hazır harita şablonları
+- [ ] Daha fazla dil
 
 Öneriniz mi var? [Bir öneri kaydı açın](https://github.com/YahyaSvm/Fatih-Kalem-Source/issues/new).
 
@@ -377,7 +376,7 @@ Hata bildirirken lütfen sistem bilgisini (Pardus sürümü, masaüstü ortamı)
 
 ## Haklar ve Teşekkür
 
-**Fatih Kalem 2.0** — [Yahya Eren Sevim](https://github.com/YahyaSvm) (YhySvm)
+**Fatih Kalem 2** — [Yahya Eren Sevim](https://github.com/YahyaSvm) (YhySvm)
 
 İlk Fatih Kalem (1.0), Fizik Öğretmeni **Hasan Yunus ATEŞ** tarafından Milli Eğitim
 Bakanlığı YEĞİTEK için yazılmıştır. Menü görselleri o sürümden gelmektedir ve hakları

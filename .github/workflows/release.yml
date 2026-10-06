@@ -17,20 +17,34 @@ jobs:
         with:
           dotnet-version: "8.0.x"
       - name: Derle
-        run: dotnet build "Fatih Kalem.csproj" -c Release -o out
-      - name: Paketle
+        run: dotnet build "Fatih Kalem.csproj" -c Release -o dist/windows-build
+      - name: Sürüm numarası
+        id: ver
         shell: pwsh
         run: |
           $v = "${{ github.ref_name }}".TrimStart("v")
-          if (-not $v -or $v -eq "main") { $v = "dev" }
-          New-Item -ItemType Directory -Force pkg | Out-Null
-          Copy-Item "out/Fatih Kalem.exe", "out/Fatih Kalem.exe.config" pkg/
-          Copy-Item README.md, CHANGELOG.md pkg/
-          Compress-Archive -Path pkg/* -DestinationPath "FatihKalem-$v-windows.zip"
+          if (-not ($v -match '^\d+\.\d+')) { $v = "0.0.0-dev" }
+          "version=$v" >> $env:GITHUB_OUTPUT
+      - name: Taşınabilir zip
+        shell: pwsh
+        run: |
+          $v = "${{ steps.ver.outputs.version }}"
+          New-Item -ItemType Directory -Force dist/windows | Out-Null
+          Compress-Archive -Path "dist/windows-build/Fatih Kalem.exe", "dist/windows-build/Fatih Kalem.exe.config", README.md, CHANGELOG.md, LICENSE -DestinationPath "dist/windows/FatihKalem-$v-windows.zip"
+      - name: Kurulum sihirbazı
+        shell: pwsh
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) {
+            choco install innosetup -y --no-progress
+          }
+          & $iscc "/DAppVersion=${{ steps.ver.outputs.version }}" installer/fatih-kalem.iss
       - uses: actions/upload-artifact@v4
         with:
           name: windows
-          path: FatihKalem-*-windows.zip
+          path: |
+            dist/windows/*.zip
+            dist/windows/*.exe
 
   pardus:
     runs-on: ubuntu-latest
@@ -39,10 +53,11 @@ jobs:
       - name: Bağımlılıklar
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3-gi python3-gi-cairo python3-cairo gir1.2-gtk-3.0 python3-pytest make
-      - name: Testler
+          sudo apt-get install -y python3-gi python3-gi-cairo python3-cairo gir1.2-gtk-3.0 \
+            python3-pytest make xvfb xauth fonts-dejavu-core
+      - name: Testler (arayüz testleri sanal ekranda)
         working-directory: linux
-        run: make test
+        run: xvfb-run -a -s "-screen 0 1920x1080x24" python3 -m pytest -q tests
       - name: .deb paketi
         working-directory: linux
         run: make deb
@@ -60,10 +75,15 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           path: artifacts
+      - name: Sürüm notları
+        run: |
+          # CHANGELOG.md'den yalnızca bu sürümün bölümü
+          awk '/^## /{n++} n==1' CHANGELOG.md > notes.md
       - uses: softprops/action-gh-release@v2
         with:
           name: Fatih Kalem ${{ github.ref_name }}
-          body_path: CHANGELOG.md
+          body_path: notes.md
           files: |
             artifacts/windows/*.zip
+            artifacts/windows/*.exe
             artifacts/pardus/*.deb

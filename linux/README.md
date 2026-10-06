@@ -1,4 +1,4 @@
-# Fatih Kalem 2.0 — Pardus / Linux Rehberi
+# Fatih Kalem 2 — Pardus / Linux Rehberi
 
 Fatih Projesi etkileşimli tahtaları için yazılmış **Fatih Kalem** programının
 Pardus (özellikle **Pardus ETAP**) ve diğer GNU/Linux dağıtımları için GTK3
@@ -17,7 +17,7 @@ yere dokunulduğunda aynı işi yapar. Ana menü açıldığında en altta
 
 ### 1.1 Pardus (ETAP, XFCE, GNOME) — önerilen yol
 
-`fatih-kalem_2.0.0_all.deb` dosyasını tahtaya (USB bellekle ya da indirerek)
+`fatih-kalem_2.1.0_all.deb` dosyasını tahtaya (USB bellekle ya da indirerek)
 kopyalayın, sonra:
 
 * **Grafik arayüzle:** dosyaya çift tıklayın. Paket yükleyici açılır,
@@ -25,7 +25,7 @@ kopyalayın, sonra:
 * **Uçbirimle:**
 
 ```bash
-sudo apt install ./fatih-kalem_2.0.0_all.deb
+sudo apt install ./fatih-kalem_2.1.0_all.deb
 ```
 
 `apt` bağımlılıkları kendisi kurar. Pardus'ta bu bağımlılıklar
@@ -167,6 +167,34 @@ sudo cp /usr/share/applications/fatih-kalem.desktop /etc/xdg/autostart/
   Oka iki kez hızlıca dokunursanız ok 5 saniye gizlenir.
 
 ---
+
+### Araçlar menüsü
+
+Ana menüde şekillerin altındaki **Araçlar** düğmesi:
+
+| Satır | Araçlar |
+|---|---|
+| Kalem çeşitleri | Normal, Kesikli, Noktalı, Oklu, Tanıma (elle çizilen şekli düzeltir) |
+| Düzenleme | Seç (kement: taşı / büyüt / kopyala / sil), Metin (Ctrl+Enter ile ekle), Lazer, Kaybolan kalem, Dolgu |
+| Ölçme | Cetvel, Gönye, İletki, Pergel, Spot ışığı. Cetvelin kenarına yakın çizilen çizgi kenara yapışır; ortasından tutulunca cetvel taşınır, turuncu tutamakla döner (15°'lere oturur). |
+| Sınıf | Büyüteç, Sayaç / Kronometre, Kura, Ekran (ekran görüntüsünü sayfa yapar), Temizle |
+| Dosya | PNG, PDF (tüm sayfalar), Ders kaydet, Ders aç, Paylaş (QR kod) |
+| Sayfalar | Önceki, Sayfa numarası, Sonraki, Yeni sayfa, Sayfa sil |
+| Renkler | Son kullanılan 5 renk ve **+** ile kaydettiğiniz 4 renklik palet (uzun basınca silinir) |
+
+* **Ders dosyaları (`.fkalem`)** tüm sayfaları, metinleri ve kullanılan resimleri içerir;
+  USB bellekle başka tahtada aynen açılır. Dosyaya çift tıklamak da açar.
+* **Otomatik kayıt:** Ders her dakika, el moduna dönerken ve tahta kapanırken
+  `~/.local/share/fatih-kalem/Otomatik Kayıt` klasörüne kaydedilir. Kaybolan bir dersi
+  **Araçlar → Ders aç** ile geri getirebilirsiniz.
+* **Paylaş:** Tüm sayfalar PDF yapılır ve aynı ağdaki telefonlar QR kodu okutarak indirir.
+  Hiçbir şey internete gönderilmez.
+
+### Okul yöneticileri için ortak ayarlar
+
+`/usr/share/doc/fatih-kalem/ayarlar-ornek.json` dosyasını `/etc/fatih-kalem/ayarlar.json`
+olarak kopyalayıp düzenleyin. Tüm öğretmen hesapları bu varsayılanlarla açılır;
+öğretmenin kendi ayarları bunların üzerine yazılır.
 
 ## 4. Sorun giderme
 

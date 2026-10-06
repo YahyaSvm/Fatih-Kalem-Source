@@ -26,6 +26,11 @@
   <url type="bugtracker">https://github.com/YahyaSvm/Fatih-Kalem-Source/issues</url>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="2.1.0" date="2026-10-06">
+      <description>
+        <p>Araçlar menüsü, ölçme araçları, çok sayfalı tahta, ders kaydetme ve paylaşma.</p>
+      </description>
+    </release>
     <release version="2.0.0" date="2026-10-06">
       <description>
         <p>Fatih Kalem 2.0: Pardus ve Linux desteğiyle yeni sürüm.</p>
