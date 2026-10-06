@@ -286,9 +286,9 @@ class Toolbar:
                 res.paint(cr, "size%dselection" % app.ink_size, x + sx, y + sy)
         elif name == "eraser":
             res.paint(cr, "submenueraser" + side, x, y)
-            if not app.history.can_undo():
+            if not app.can_undo():
                 res.paint(cr, "grayedundo", x + 20, y + 14)
-            if not app.history.can_redo():
+            if not app.can_redo():
                 res.paint(cr, "grayedredo", x + 65, y + 14)
         elif name == "shape":
             res.paint(cr, "submenushape" + side, x, y)

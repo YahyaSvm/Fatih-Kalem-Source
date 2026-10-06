@@ -7,7 +7,7 @@ yazılmış sürümü.
 
 APP_ID = "tr.yhysvm.FatihKalem"
 APP_NAME = "Fatih Kalem"
-VERSION = "2.1.0"
+VERSION = "2.1.1"
 PORT_AUTHOR = "YhySvm"
 AUTHOR_NAME = "Yahya Eren Sevim"
 GITHUB_URL = "https://github.com/YahyaSvm/Fatih-Kalem-Source"

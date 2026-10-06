@@ -153,19 +153,19 @@ En güncel dosyalar **[Releases](https://github.com/YahyaSvm/Fatih-Kalem-Source/
 
 ### Pardus / ETAP
 
-**Grafik arayüzle:** `fatih-kalem_2.1.0_all.deb` dosyasına çift tıklayın ve **Yükle**'ye basın.
+**Grafik arayüzle:** `fatih-kalem_2.1.1_all.deb` dosyasına çift tıklayın ve **Yükle**'ye basın.
 
 **Uçbirimle:**
 
 ```bash
-sudo apt install ./fatih-kalem_2.1.0_all.deb
+sudo apt install ./fatih-kalem_2.1.1_all.deb
 ```
 
 **İnternet bağlantılı tahtada tek komutla:**
 
 ```bash
-wget https://github.com/YahyaSvm/Fatih-Kalem-Source/releases/download/v2.1.0/fatih-kalem_2.1.0_all.deb \
-  && sudo apt install ./fatih-kalem_2.1.0_all.deb
+wget https://github.com/YahyaSvm/Fatih-Kalem-Source/releases/download/v2.1.1/fatih-kalem_2.1.1_all.deb \
+  && sudo apt install ./fatih-kalem_2.1.1_all.deb
 ```
 
 Kurulumdan sonra program **Uygulamalar → Eğitim → Fatih Kalem** altında yer alır.
@@ -202,10 +202,10 @@ Wayland, saydamlık, dokunmatik kalibrasyon ve sorun giderme ayrıntıları içi
 
 ### Windows
 
-**Kurulum sihirbazıyla (önerilen):** `FatihKalem-2.1.0-kurulum.exe` dosyasını çalıştırın.
+**Kurulum sihirbazıyla (önerilen):** `FatihKalem-2.1.1-kurulum.exe` dosyasını çalıştırın.
 Yönetici yetkisi gerekmez; isteğe bağlı masaüstü kısayolu ve açılışta başlatma seçenekleri vardır.
 
-**Taşınabilir:** `FatihKalem-2.1.0-windows.zip` dosyasını bir klasöre açıp `Fatih Kalem.exe`
+**Taşınabilir:** `FatihKalem-2.1.1-windows.zip` dosyasını bir klasöre açıp `Fatih Kalem.exe`
 dosyasını çalıştırın.
 
 .NET Framework 4.8 gerekir (Windows 10 ve 11'de hazır gelir). Yeni sürüm çıktığında
@@ -216,7 +216,7 @@ program sizi bilgilendirir.
 | Menü öğesi | Ne yapar? |
 |---|---|
 | **Fatih Kalem başlığı** | Basılı tutup sürükleyin; fırlatırsanız kayarak ilerler. |
-| **Kalem / El** | Kalem moduna geçer. El moduna dönüldüğünde çizimler temizlenir. |
+| **Kalem / El** | Kalem moduna geçer. El moduna dönüldüğünde çizimler temizlenir; kalemi tekrar açıp **Geri Al** ile geri getirebilirsiniz. |
 | **Kalem** | Kalem tipi, renk, kartela, kalemsiz mod ve kalınlık. |
 | **Silgi** | Geri al, yinele, perde ve dört silgi boyutu. |
 | **Şekiller** | Altı şekil, görsel kütüphanesi ve arka plan sayfaları. |
@@ -296,7 +296,7 @@ Windows paketini derler, Linux testlerini çalıştırır, `.deb` paketini üret
 release'i otomatik oluşturur:
 
 ```bash
-git tag v2.1.0 && git push origin v2.1.0
+git tag v2.1.1 && git push origin v2.1.1
 ```
 
 ## Proje Yapısı

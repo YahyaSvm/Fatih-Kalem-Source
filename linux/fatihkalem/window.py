@@ -82,6 +82,8 @@ class KalemWindow(FeaturesMixin, Gtk.Window):
         super().__init__(application=application, title="Fatih Kalem")
         self.settings = settings
         self.book = Book()                               # çok sayfalı tahta
+        self.cleared_book = None     # el moduna geçerken temizlenen ders (Geri Al)
+        self.uncleared_book = None   # Geri Al'dan sonra Yinele için
 
         # ---- durum (orijinal alan adları yorumda) ----
         self.pen_style = settings["PenStyle"]            # PenStyle
@@ -266,9 +268,9 @@ class KalemWindow(FeaturesMixin, Gtk.Window):
         return None
 
     def fav_image(self, tag):
-        if tag == "Undo" and not self.history.can_undo():
+        if tag == "Undo" and not self.can_undo():
             return "favgrayedundo"
-        if tag == "Redo" and not self.history.can_redo():
+        if tag == "Redo" and not self.can_redo():
             return "favgrayedredo"
         name = "fav" + tag
         return name if res.has_image(name) else "favline"
@@ -948,6 +950,7 @@ class KalemWindow(FeaturesMixin, Gtk.Window):
             self._queue_bbox(s.bbox())
             return
         strokes = self._finish_stroke(s)
+        self.uncleared_book = None       # yeni çizim: temizlemeyi yineleme yok
         sc = self.history.scene
         self.history.commit(sc.replace(strokes=sc.strokes + tuple(strokes)))
         dirty = s.bbox()
@@ -1005,6 +1008,7 @@ class KalemWindow(FeaturesMixin, Gtk.Window):
         self.erasing = False
         after = self.history.scene
         if after is not self.erase_before:
+            self.uncleared_book = None
             self.history.set_without_history(self.erase_before)
             self.history.commit(after)
             self._dirty = True
@@ -1074,6 +1078,8 @@ class KalemWindow(FeaturesMixin, Gtk.Window):
 
     def _commit_shapes(self, strokes):
         self.preview = []
+        if strokes:
+            self.uncleared_book = None
         if strokes:
             sc = self.history.scene
             self.history.commit(sc.replace(strokes=sc.strokes + tuple(strokes)))
@@ -1450,9 +1456,13 @@ class KalemWindow(FeaturesMixin, Gtk.Window):
             self.clear_selection()
             self.overlays = [o for o in self.overlays if isinstance(o, tl.TimerWidget)]
             if not self.first_run and not self.book.is_empty():
-                # ClearCanvas: önce otomatik kaydet ("Ders aç" ile geri gelir).
+                # ClearCanvas: temizlenen ders (tüm sayfalarıyla) bellekte
+                # tutulur; kalem tekrar açılınca Geri Al ile geri gelir.
+                # Ayrıca diske otomatik kaydedilir (Araçlar → Ders aç).
                 self.autosave_now()
-                self.book.reset()
+                self.cleared_book = self.book
+                self.uncleared_book = None
+                self.book = Book()
                 self.base = None
             self.minimized = True
             self.scene_changed()
@@ -1701,12 +1711,28 @@ class KalemWindow(FeaturesMixin, Gtk.Window):
         self._update_input_shape()
         self.queue_draw()
 
+    def _can_restore_cleared(self):
+        """El moduna geçerken temizlenen ders geri getirilebilir mi?"""
+        return (self.cleared_book is not None and len(self.book) == 1
+                and not self.history.can_undo() and self.history.scene.is_empty())
+
+    def can_undo(self):
+        return self.history.can_undo() or self._can_restore_cleared()
+
+    def can_redo(self):
+        return self.history.can_redo() or self.uncleared_book is not None
+
     def undo(self):
         self.cancel_triangle()
         self.clear_selection()
         self.place_library_item()
         if self.history.undo():
             self.scene_changed()
+        elif self._can_restore_cleared():
+            # Temizlemeyi geri al: önceki dersin tüm sayfaları geri gelir
+            self.uncleared_book = self.book
+            self.book, self.cleared_book = self.cleared_book, None
+            self._page_switched()
         self.queue_draw()
 
     def redo(self):
@@ -1714,6 +1740,11 @@ class KalemWindow(FeaturesMixin, Gtk.Window):
         self.clear_selection()
         if self.history.redo():
             self.scene_changed()
+        elif self.uncleared_book is not None and not self.history.can_redo():
+            # Temizlemeyi yinele
+            self.cleared_book = self.book
+            self.book, self.uncleared_book = self.uncleared_book, None
+            self._page_switched()
         self.queue_draw()
 
     # -------------------------------------------------------------- ayarlar

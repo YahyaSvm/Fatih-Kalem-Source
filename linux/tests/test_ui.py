@@ -142,6 +142,34 @@ def test_minimize_autosaves_and_clears(win, tmp_path):
     assert os.listdir(auto)
 
 
+def test_undo_after_minimize_restores_all_pages(win):
+    draw(win, [(100, 100), (200, 200)])
+    win.perform_tool("page:new")
+    draw(win, [(300, 300), (400, 400)])
+    win.toggle_minimized()            # el modu: temizlenir
+    win.toggle_minimized()            # kalem modu: boş tahta
+    assert win.book.is_empty() and win.can_undo()
+    win.undo()                        # Silgi → Geri Al
+    assert len(win.book) == 2 and not win.book.is_empty()
+    assert win.can_redo()
+    win.redo()                        # tekrar temizle
+    assert win.book.is_empty()
+    win.undo()
+    assert len(win.book) == 2
+
+
+def test_new_drawing_after_minimize_then_undo_twice(win):
+    draw(win, [(100, 100), (200, 200)])
+    win.toggle_minimized()
+    win.toggle_minimized()
+    draw(win, [(500, 500), (600, 600)])
+    win.undo()                        # önce yeni çizgi gider
+    assert win.history.scene.is_empty()
+    win.undo()                        # sonra eski ders geri gelir
+    assert len(win.history.scene.strokes) == 1
+    assert win.history.scene.strokes[0].points[0][:2] == (100, 100)
+
+
 def test_menu_scale_hit_testing(win):
     win.settings["MenuScale"] = 1.5
     win.settings_changed()

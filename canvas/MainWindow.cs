@@ -3218,7 +3218,7 @@ public class MainWindow : Window, IComponentConnector
 
 	private const string GitHubUrl = "https://github.com/YahyaSvm/Fatih-Kalem-Source";
 
-	private const string CurrentVersion = "2.1.0";
+	private const string CurrentVersion = "2.1.1";
 
 	// Açılıştan sonra arka planda GitHub'daki son sürümü denetler (günde en çok bir kez).
 	private void CheckForUpdates()

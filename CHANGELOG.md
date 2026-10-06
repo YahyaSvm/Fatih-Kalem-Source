@@ -1,5 +1,12 @@
 # Değişiklik Günlüğü
 
+## 2.1.1 — 2026-10-06
+
+### Düzeltme
+- El moduna geçerken temizlenen çizimler artık kaybolmuyor: kalemi yeniden açıp
+  **Silgi → Geri Al**'a basınca tüm sayfalarıyla geri geliyor (**Yinele** ile tekrar
+  temizlenir). Ders ayrıca otomatik olarak diske de kaydediliyor.
+
 ## 2.1.0 — 2026-10-06
 
 ### Yeni: Araçlar menüsü (Pardus / Linux)

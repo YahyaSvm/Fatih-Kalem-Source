@@ -17,7 +17,7 @@ yere dokunulduğunda aynı işi yapar. Ana menü açıldığında en altta
 
 ### 1.1 Pardus (ETAP, XFCE, GNOME) — önerilen yol
 
-`fatih-kalem_2.1.0_all.deb` dosyasını tahtaya (USB bellekle ya da indirerek)
+`fatih-kalem_2.1.1_all.deb` dosyasını tahtaya (USB bellekle ya da indirerek)
 kopyalayın, sonra:
 
 * **Grafik arayüzle:** dosyaya çift tıklayın. Paket yükleyici açılır,
@@ -25,7 +25,7 @@ kopyalayın, sonra:
 * **Uçbirimle:**
 
 ```bash
-sudo apt install ./fatih-kalem_2.1.0_all.deb
+sudo apt install ./fatih-kalem_2.1.1_all.deb
 ```
 
 `apt` bağımlılıkları kendisi kurar. Pardus'ta bu bağımlılıklar
