@@ -15,6 +15,7 @@ from . import (APP_NAME, AUTHOR_NAME, GITHUB_PROFILE, GITHUB_URL,  # noqa: E402
 from . import resources as res  # noqa: E402
 from . import styles as st  # noqa: E402
 from .config import DEFAULTS, hex_to_rgb  # noqa: E402
+from .i18n import _  # noqa: E402
 from .toolbar import BYLINE_TEXT  # noqa: E402
 
 CSS = b"""
@@ -64,7 +65,7 @@ def _surface_pixbuf(name, size=None):
 
 class SettingsWindow(Gtk.Window):
     def __init__(self, kalem):
-        super().__init__(title="Fatih Kalem - Ayarlar")
+        super().__init__(title=_("Fatih Kalem - Ayarlar"))
         self.kalem = kalem
         self.s = kalem.settings
         self.set_transient_for(kalem)
@@ -81,7 +82,7 @@ class SettingsWindow(Gtk.Window):
             Gdk.Screen.get_default(), provider,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
-        header = Gtk.HeaderBar(title="Ayarlar", show_close_button=True)
+        header = Gtk.HeaderBar(title=_("Ayarlar"), show_close_button=True)
         self.set_titlebar(header)
 
         self.stack = Gtk.Stack(transition_type=Gtk.StackTransitionType.CROSSFADE,
@@ -94,13 +95,15 @@ class SettingsWindow(Gtk.Window):
         box.pack_start(self.stack, True, True, 0)
         self.add(box)
 
-        self.stack.add_titled(self._page_pen(), "pen", "Başlangıç Kalemi")
-        self.stack.add_titled(self._page_position(), "position", "Başlangıç Konumu")
-        self.stack.add_titled(self._page_favourites(), "favourites", "Sık Kullanılanlar")
-        self.stack.add_titled(self._page_speed(), "speed", "Hızlı Erişim")
-        self.stack.add_titled(self._page_close(), "close", "Kapatma Onayı")
-        self.stack.add_titled(self._page_autostart(), "autostart", "Otomatik Başlatma")
-        self.stack.add_titled(self._page_about(), "about", "Hakkında")
+        self.stack.add_titled(self._page_pen(), "pen", _("Başlangıç Kalemi"))
+        self.stack.add_titled(self._page_position(), "position", _("Başlangıç Konumu"))
+        self.stack.add_titled(self._page_favourites(), "favourites", _("Sık Kullanılanlar"))
+        self.stack.add_titled(self._page_speed(), "speed", _("Hızlı Erişim"))
+        self.stack.add_titled(self._page_close(), "close", _("Kapatma Onayı"))
+        self.stack.add_titled(self._page_autostart(), "autostart", _("Otomatik Başlatma"))
+        self.stack.add_titled(self._page_appearance(), "appearance", _("Görünüm"))
+        self.stack.add_titled(self._page_advanced(), "advanced", _("Gelişmiş"))
+        self.stack.add_titled(self._page_about(), "about", _("Hakkında"))
         self.connect("key-press-event", self._on_key)
         self.show_all()
 
@@ -165,7 +168,7 @@ class SettingsWindow(Gtk.Window):
 
     def _refresh_pen(self):
         style = self.s["PenStyle"]
-        self.pen_info.set_text("Kalem tipi : %s\nBoyut : %d\nRenk :" % (
+        self.pen_info.set_text(_("Kalem tipi : %s\nBoyut : %d\nRenk :") % (
             st.STYLE_TITLES.get(style, "?"), self.s["InkSize"]))
         self.pen_swatch.queue_draw()
 
@@ -238,8 +241,8 @@ class SettingsWindow(Gtk.Window):
     def _page_favourites(self):
         page = self._page()
         page.pack_start(self._label(
-            "Sık kullandığınız komutları ana menüye eklemek için üzerine uzun basın "
-            "(farede sağ tıklayın). Komutu ana menüden kaldırmak için üzerine uzun basın."),
+            _("Sık kullandığınız komutları ana menüye eklemek için üzerine uzun basın "
+              "(farede sağ tıklayın). Komutu ana menüden kaldırmak için üzerine uzun basın.")),
             False, False, 0)
         self.fav_store = Gtk.ListStore(GdkPixbuf.Pixbuf, str, str)
         view = Gtk.TreeView(model=self.fav_store, headers_visible=False, reorderable=True)
@@ -320,8 +323,8 @@ class SettingsWindow(Gtk.Window):
         page.pack_start(self._check("Ekran alt kenarlarında çağırma oklarını göster.",
                                     "isSideArrowsEnabled"), False, False, 0)
         page.pack_start(self._label(
-            "Fare ile: sağ tuşa basılı tutup sola (kırmızı), sağa (mavi), yukarı (siyah) "
-            "ya da aşağı (silgi) çekin."), False, False, 0)
+            _("Fare ile: sağ tuşa basılı tutup sola (kırmızı), sağa (mavi), yukarı (siyah) "
+              "ya da aşağı (silgi) çekin.")), False, False, 0)
         return page
 
     # ---------------------------------------------------------- Kapatma Onayı
@@ -335,9 +338,9 @@ class SettingsWindow(Gtk.Window):
     def _page_autostart(self):
         page = self._page()
         state = system.autostart_state()
-        self.chk_auto = Gtk.CheckButton(label="Sistem açılışında otomatik başlat")
+        self.chk_auto = Gtk.CheckButton(label=_("Sistem açılışında otomatik başlat"))
         self.chk_pre = Gtk.CheckButton(
-            label="Sistem açılışında ön yükleme yap. (Faz 1 tahtaları için önerilir.)")
+            label=_("Sistem açılışında ön yükleme yap. (Faz 1 tahtaları için önerilir.)"))
         self.chk_auto.set_active(state == "start")
         self.chk_pre.set_active(state == "preload")
         self.chk_pre.set_sensitive(state != "start")
@@ -346,8 +349,8 @@ class SettingsWindow(Gtk.Window):
         page.pack_start(self.chk_auto, False, False, 0)
         page.pack_start(self.chk_pre, False, False, 0)
         page.pack_start(self._label(
-            "Ön yükleme, program dosyalarını açılışta belleğe alıp hemen kapanır; "
-            "böylece kalem ilk açılışta daha hızlı gelir."), False, False, 0)
+            _("Ön yükleme, program dosyalarını açılışta belleğe alıp hemen kapanır; "
+              "böylece kalem ilk açılışta daha hızlı gelir.")), False, False, 0)
         return page
 
     def _auto_toggled(self, chk):
@@ -371,6 +374,127 @@ class SettingsWindow(Gtk.Window):
         self.s["PreLoad"] = chk.get_active()
         self.s.save()
 
+    # ------------------------------------------------------------- Görünüm
+    def _combo(self, title, options, key, cast=str):
+        row = Gtk.Box(spacing=12)
+        lbl = self._label(title, wrap=False)
+        lbl.set_size_request(170, -1)
+        row.pack_start(lbl, False, False, 0)
+        combo = Gtk.ComboBoxText()
+        values = []
+        for value, text in options:
+            combo.append_text(text)
+            values.append(value)
+        current = self.s[key]
+        combo.set_active(values.index(current) if current in values else 0)
+
+        def changed(c):
+            self.s[key] = cast(values[c.get_active()])
+            self.s.save()
+            self.kalem.settings_changed()
+        combo.connect("changed", changed)
+        row.pack_start(combo, False, False, 0)
+        return row
+
+    def _page_appearance(self):
+        page = self._page()
+        page.pack_start(self._combo(_("Dil"), [("auto", _("Otomatik")), ("tr", "Türkçe"),
+                                               ("en", "English")], "Language"), False, False, 0)
+        page.pack_start(self._combo(_("Menü boyutu"),
+                                    [(1.0, "%100"), (1.25, "%125"), (1.5, "%150"), (2.0, "%200")],
+                                    "MenuScale", float), False, False, 0)
+        page.pack_start(self._combo(_("Alt menüler"),
+                                    [("auto", _("Otomatik (yer varsa sağda)")),
+                                     ("left", _("Her zaman solda (sol el)")),
+                                     ("right", _("Her zaman sağda"))], "SubmenuSide"),
+                        False, False, 0)
+        display = Gdk.Display.get_default()
+        screens = [(-1, _("Birincil ekran"))]
+        screens += [(i, _("Ekran %d") % (i + 1)) for i in range(display.get_n_monitors())]
+        if display.get_n_monitors() > 1:
+            screens.append((-2, _("Tüm ekranlar")))
+        page.pack_start(self._combo(_("Ekran"), screens, "Monitor", int), False, False, 0)
+        page.pack_start(self._label(_("Ekran değişikliği programı yeniden başlatınca uygulanır.")),
+                        False, False, 0)
+        page.pack_start(self._check(_("Renk körlüğüne uygun renkler"), "ColorBlindPalette"),
+                        False, False, 0)
+        return page
+
+    # ------------------------------------------------------------ Gelişmiş
+    def _page_advanced(self):
+        page = self._page()
+        page.pack_start(self._check(_("El yazısını yumuşat"), "SmoothInk"), False, False, 0)
+        page.pack_start(self._check(_("Elle çizilen şekilleri düzelt (şekil tanıma)"),
+                                    "ShapeRecognition"), False, False, 0)
+        page.pack_start(self._check(_("Dersi her dakika otomatik kaydet"), "Autosave"),
+                        False, False, 0)
+        page.pack_start(self._check(_("Güncellemeleri denetle"), "CheckUpdates"), False, False, 0)
+        page.pack_start(self._button(_("Ayarları dışa aktar"), self._export_settings), False, False, 0)
+        page.pack_start(self._button(_("Ayarları içe aktar"), self._import_settings), False, False, 0)
+        page.pack_start(self._button(_("Hata raporu oluştur"), self._bug_report), False, False, 0)
+        return page
+
+    def _pick_file(self, title, action, name=None):
+        dlg = Gtk.FileChooserDialog(title=title, transient_for=self, action=action)
+        dlg.add_buttons(_("Vazgeç"), Gtk.ResponseType.CANCEL,
+                        _("Kaydet") if action == Gtk.FileChooserAction.SAVE else _("Aç"),
+                        Gtk.ResponseType.ACCEPT)
+        if name:
+            dlg.set_current_name(name)
+            dlg.set_do_overwrite_confirmation(True)
+        flt = Gtk.FileFilter()
+        flt.set_name("JSON")
+        flt.add_pattern("*.json")
+        dlg.add_filter(flt)
+        resp = dlg.run()
+        path = dlg.get_filename() if resp == Gtk.ResponseType.ACCEPT else None
+        dlg.destroy()
+        return path
+
+    def _message(self, text, error=False):
+        dlg = Gtk.MessageDialog(transient_for=self, modal=True,
+                                message_type=Gtk.MessageType.ERROR if error else Gtk.MessageType.INFO,
+                                buttons=Gtk.ButtonsType.OK, text=text)
+        dlg.run()
+        dlg.destroy()
+
+    def _export_settings(self):
+        path = self._pick_file(_("Ayarları dışa aktar"), Gtk.FileChooserAction.SAVE,
+                               "fatih-kalem-ayarlar.json")
+        if path:
+            try:
+                self.s.export_to(path)
+                self._message(_("Kaydedildi: %s") % path)
+            except OSError as e:
+                self._message(_("Kaydedilemedi: %s") % e, True)
+
+    def _import_settings(self):
+        path = self._pick_file(_("Ayarları içe aktar"), Gtk.FileChooserAction.OPEN)
+        if not path:
+            return
+        try:
+            self.s.import_from(path)
+        except (OSError, ValueError) as e:
+            self._message(_("Açılamadı: %s") % e, True)
+            return
+        self.kalem.favourites_changed()
+        self.kalem.settings_changed()
+        self._message(_("Ayarlar içe aktarıldı. Bazı ayarlar yeniden başlatınca uygulanır."))
+
+    def _bug_report(self):
+        from .diagnostics import write_report
+        try:
+            path, url = write_report(self.kalem.composited)
+        except OSError as e:
+            self._message(_("Kaydedilemedi: %s") % e, True)
+            return
+        self._message(_("Hata raporu kaydedildi:\n%s\n\nGitHub'da yeni bir kayıt açılıyor; "
+                        "dosyayı oraya ekleyin.") % path)
+        try:
+            Gtk.show_uri_on_window(self, url, Gdk.CURRENT_TIME)
+        except Exception:
+            pass
+
     # --------------------------------------------------------------- Hakkında
     def _page_about(self):
         page = self._page()
@@ -388,12 +512,12 @@ class SettingsWindow(Gtk.Window):
             "basıncı, HiDPI ekran desteği, yeni arka plan sayfaları ve daha kararlı "
             "geri al / yinele."), False, False, 0)
 
-        dev = self._label("Geliştiren: %s (%s)" % (AUTHOR_NAME, PORT_AUTHOR), "fk-title")
+        dev = self._label(_("Geliştiren: %s (%s)") % (AUTHOR_NAME, PORT_AUTHOR), "fk-title")
         page.pack_start(dev, False, False, 0)
         links = Gtk.Grid(column_spacing=6, row_spacing=2)
-        for i, (url, text) in enumerate(((GITHUB_URL, "Proje sayfası (GitHub)"),
-                                         (GITHUB_URL + "/releases", "Yeni sürümler"),
-                                         (GITHUB_URL + "/issues", "Hata bildir"),
+        for i, (url, text) in enumerate(((GITHUB_URL, _("Proje sayfası (GitHub)")),
+                                         (GITHUB_URL + "/releases", _("Yeni sürümler")),
+                                         (GITHUB_URL + "/issues", _("Hata bildir")),
                                          (GITHUB_PROFILE, "GitHub: @YahyaSvm"))):
             link = Gtk.LinkButton.new_with_label(url, text)
             link.set_halign(Gtk.Align.START)

@@ -47,23 +47,103 @@ class LibraryItem:
 class Scene:
     """Değiştirilemez sahne anlık görüntüsü."""
 
-    __slots__ = ("strokes", "backgrounds", "library", "curtain")
+    __slots__ = ("strokes", "backgrounds", "library", "curtain", "texts", "fills")
 
-    def __init__(self, strokes=(), backgrounds=(), library=(), curtain=None):
+    def __init__(self, strokes=(), backgrounds=(), library=(), curtain=None,
+                 texts=(), fills=()):
         self.strokes = tuple(strokes)
         self.backgrounds = tuple(backgrounds)   # dosya yolları (en sonuncusu üstte)
         self.library = tuple(library)           # LibraryItem
         self.curtain = curtain                  # (x, y, w, h) açık alan ya da None
+        self.texts = tuple(texts)               # TextItem
+        self.fills = tuple(fills)               # FillItem
 
     def replace(self, **kw):
         d = {"strokes": self.strokes, "backgrounds": self.backgrounds,
-             "library": self.library, "curtain": self.curtain}
+             "library": self.library, "curtain": self.curtain,
+             "texts": self.texts, "fills": self.fills}
         d.update(kw)
         return Scene(**d)
 
     def is_empty(self):
         return not (self.strokes or self.backgrounds or self.library
-                    or self.curtain is not None)
+                    or self.curtain is not None or self.texts or self.fills)
+
+    def cleared(self):
+        return Scene()
+
+
+class TextItem:
+    """Ekrana yazılmış metin (değiştirilemez)."""
+
+    __slots__ = ("text", "x", "y", "size", "color")
+
+    def __init__(self, text, x, y, size, color):
+        self.text = text
+        self.x = float(x)        # sol üst köşe
+        self.y = float(y)
+        self.size = float(size)  # punto (px)
+        self.color = tuple(color)
+
+    def moved(self, dx, dy, scale=1.0, origin=None):
+        if origin is None:
+            return TextItem(self.text, self.x + dx, self.y + dy, self.size, self.color)
+        ox, oy = origin
+        return TextItem(self.text, ox + (self.x - ox) * scale + dx,
+                        oy + (self.y - oy) * scale + dy, self.size * scale, self.color)
+
+    def bbox(self):
+        # Yaklaşık kutu: Pango ölçüsü pencere tarafında hesaplanır, burada
+        # seçim/silgi için kaba bir sınır yeterli.
+        lines = self.text.split("\n") or [""]
+        w = max(len(l) for l in lines) * self.size * 0.6 + 4
+        h = len(lines) * self.size * 1.3 + 4
+        return (self.x, self.y, self.x + w, self.y + h)
+
+
+class FillItem:
+    """Kapalı bir bölgenin boya kovasıyla doldurulmuş hali."""
+
+    __slots__ = ("points", "color", "alpha")
+
+    def __init__(self, points, color, alpha=0.45):
+        self.points = tuple(points)
+        self.color = tuple(color)
+        self.alpha = float(alpha)
+
+    def moved(self, dx, dy, scale=1.0, origin=None):
+        if origin is None:
+            return FillItem([(x + dx, y + dy) for x, y in self.points], self.color, self.alpha)
+        ox, oy = origin
+        return FillItem([(ox + (x - ox) * scale + dx, oy + (y - oy) * scale + dy)
+                         for x, y in self.points], self.color, self.alpha)
+
+    def bbox(self):
+        xs = [p[0] for p in self.points]
+        ys = [p[1] for p in self.points]
+        return (min(xs), min(ys), max(xs), max(ys))
+
+
+def point_in_polygon(x, y, poly):
+    inside = False
+    n = len(poly)
+    j = n - 1
+    for i in range(n):
+        xi, yi = poly[i][0], poly[i][1]
+        xj, yj = poly[j][0], poly[j][1]
+        if (yi > y) != (yj > y) and x < (xj - xi) * (y - yi) / ((yj - yi) or 1e-9) + xi:
+            inside = not inside
+        j = i
+    return inside
+
+
+def polygon_area(poly):
+    a = 0.0
+    for i in range(len(poly)):
+        x1, y1 = poly[i][0], poly[i][1]
+        x2, y2 = poly[(i + 1) % len(poly)][0], poly[(i + 1) % len(poly)][1]
+        a += x1 * y2 - x2 * y1
+    return abs(a) / 2.0
 
 
 class History:
@@ -110,3 +190,47 @@ class History:
         self.scene = Scene()
         self._undo.clear()
         self._redo.clear()
+
+
+class Book:
+    """Çok sayfalı tahta: her sayfanın kendi geri al / yinele geçmişi vardır."""
+
+    MAX_PAGES = 99
+
+    def __init__(self):
+        self.pages = [History()]
+        self.index = 0
+
+    @property
+    def current(self):
+        return self.pages[self.index]
+
+    def __len__(self):
+        return len(self.pages)
+
+    def new_page(self):
+        if len(self.pages) >= self.MAX_PAGES:
+            return False
+        self.pages.insert(self.index + 1, History())
+        self.index += 1
+        return True
+
+    def go(self, index):
+        if 0 <= index < len(self.pages) and index != self.index:
+            self.index = index
+            return True
+        return False
+
+    def delete_page(self):
+        if len(self.pages) == 1:
+            self.pages[0].reset()
+            return
+        del self.pages[self.index]
+        self.index = min(self.index, len(self.pages) - 1)
+
+    def is_empty(self):
+        return all(h.scene.is_empty() for h in self.pages)
+
+    def reset(self):
+        self.pages = [History()]
+        self.index = 0

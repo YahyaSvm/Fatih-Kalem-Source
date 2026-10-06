@@ -25,9 +25,46 @@ DEFAULTS = {
     "isGestureEnabled": True,
     "Favourites": [],              # en fazla 20 etiket ("MarkerRed", "Undo", ...)
     "LastBrowsedPath": "",
+    # --- 2.1 ile gelenler
+    "Language": "auto",            # auto | tr | en
+    "MenuScale": 1.0,              # 1.0, 1.25, 1.5, 2.0
+    "SubmenuSide": "auto",         # auto | left | right
+    "ColorBlindPalette": False,
+    "SmoothInk": False,
+    "ShapeRecognition": False,
+    "Monitor": -1,                 # -1 birincil, -2 tüm ekranlar, 0.. ekran no
+    "CheckUpdates": True,
+    "LastUpdateCheck": 0.0,
+    "DismissedVersion": "",
+    "Autosave": True,
+    "RecentColors": [],            # "#RRGGBB" (en yeni başta)
+    "CustomPalette": [],           # kullanıcının kaydettiği renkler
+    "StudentList": "",
+    "LotRange": "1-30",
 }
 
 MAX_FAVOURITES = 20
+MAX_RECENT_COLORS = 5
+MAX_CUSTOM_PALETTE = 4
+
+# Okul / BT yöneticisinin tüm kullanıcılar için belirlediği varsayılanlar.
+SYSTEM_DEFAULTS_PATH = "/etc/fatih-kalem/ayarlar.json"
+
+
+def _same_type(value, default):
+    if isinstance(default, bool):
+        return isinstance(value, bool)
+    if isinstance(default, float):
+        return isinstance(value, (int, float)) and not isinstance(value, bool)
+    if isinstance(default, int):
+        return isinstance(value, int) and not isinstance(value, bool)
+    return isinstance(value, type(default))
+
+
+def _merge(target, data):
+    for key, default in DEFAULTS.items():
+        if key in data and _same_type(data[key], default):
+            target[key] = float(data[key]) if isinstance(default, float) else data[key]
 
 
 def config_dir():
@@ -41,25 +78,59 @@ def data_home():
 
 
 class Settings:
-    def __init__(self, path=None):
+    def __init__(self, path=None, system_path=SYSTEM_DEFAULTS_PATH):
         self.path = path or os.path.join(config_dir(), "ayarlar.json")
+        self.system_path = system_path
         self.values = dict(DEFAULTS)
         self.load()
 
-    def load(self):
+    @staticmethod
+    def _read(path):
         try:
-            with open(self.path, encoding="utf-8") as f:
+            with open(path, encoding="utf-8") as f:
                 data = json.load(f)
+            return data if isinstance(data, dict) else {}
         except (OSError, ValueError):
-            return
-        for key, default in DEFAULTS.items():
-            if key in data and isinstance(data[key], type(default)):
-                self.values[key] = data[key]
-        favs = [f for f in self.values["Favourites"] if isinstance(f, str)]
-        self.values["Favourites"] = favs[:MAX_FAVOURITES]
+            return {}
+
+    def load(self):
+        self.values = dict(DEFAULTS)
+        if self.system_path:
+            _merge(self.values, self._read(self.system_path))
+        _merge(self.values, self._read(self.path))
+        self._validate()
+
+    def _validate(self):
+        v = self.values
+        v["Favourites"] = [f for f in v["Favourites"] if isinstance(f, str)][:MAX_FAVOURITES]
         for key, lo, hi in (("PenStyle", 0, 2), ("ColorNo", 1, 7), ("InkSize", 1, 6)):
-            if not lo <= self.values[key] <= hi:
-                self.values[key] = DEFAULTS[key]
+            if not lo <= v[key] <= hi:
+                v[key] = DEFAULTS[key]
+        if v["Language"] not in ("auto", "tr", "en"):
+            v["Language"] = "auto"
+        if v["SubmenuSide"] not in ("auto", "left", "right"):
+            v["SubmenuSide"] = "auto"
+        v["MenuScale"] = min(2.0, max(1.0, v["MenuScale"]))
+        for key, limit in (("RecentColors", MAX_RECENT_COLORS),
+                           ("CustomPalette", MAX_CUSTOM_PALETTE)):
+            v[key] = [c for c in v[key] if isinstance(c, str) and c.startswith("#")][:limit]
+
+    def export_to(self, path):
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(self.values, f, ensure_ascii=False, indent=2)
+
+    def import_from(self, path):
+        data = self._read(path)
+        if not data:
+            raise ValueError("geçersiz ayar dosyası")
+        _merge(self.values, data)
+        self._validate()
+        self.save()
+
+    def add_recent_color(self, rgb):
+        h = rgb_to_hex(rgb)
+        lst = [c for c in self.values["RecentColors"] if c != h]
+        self.values["RecentColors"] = ([h] + lst)[:MAX_RECENT_COLORS]
 
     def save(self):
         os.makedirs(os.path.dirname(self.path), exist_ok=True)

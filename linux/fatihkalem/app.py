@@ -49,17 +49,32 @@ def main(argv=None):
     gi.require_version("Gtk", "3.0")
     from gi.repository import Gio, GLib, Gtk
 
-    from . import APP_ID
-    from .config import Settings
-    from .window import KalemWindow
+    import signal
 
-    monitor = None
-    for i, a in enumerate(argv[1:]):
-        if a in ("--ekran", "--monitor") and i + 2 < len(argv):
-            try:
-                monitor = int(argv[i + 2])
-            except ValueError:
-                pass
+    from . import APP_ID, i18n, update
+    from .config import Settings
+    from .diagnostics import setup_logging
+
+    log = setup_logging()
+    settings = Settings()
+    i18n.set_language(settings["Language"])
+
+    from .window import KalemWindow   # çeviri dili ayarlandıktan sonra
+
+    def parse(args):
+        monitor, files = None, []
+        it = iter(range(1, len(args)))
+        for i in it:
+            a = args[i]
+            if a in ("--ekran", "--monitor") and i + 1 < len(args):
+                try:
+                    monitor = int(args[i + 1])
+                except ValueError:
+                    pass
+                next(it, None)
+            elif not a.startswith("-") and a.lower().endswith(".fkalem"):
+                files.append(a)
+        return monitor, files
 
     GLib.set_prgname("fatih-kalem")
     GLib.set_application_name("Fatih Kalem")
@@ -69,20 +84,48 @@ def main(argv=None):
             super().__init__(application_id=APP_ID,
                              flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
             self.window = None
+            self.set_property("register-session", True)
 
         def do_command_line(self, command_line):
-            self.activate()
+            args = command_line.get_arguments()
+            monitor, files = parse(args)
+            cwd = command_line.get_cwd() or os.getcwd()
+            self._start(monitor)
+            for f in files:
+                self.window.open_lesson(os.path.join(cwd, f))
             return 0
 
         def do_activate(self):
+            self._start(None)
+
+        def _start(self, monitor):
             if self.window is None:
-                self.window = KalemWindow(self, Settings(), monitor)
+                self.window = KalemWindow(self, settings, monitor)
                 self.window.show_all()
+                self.connect("query-end", lambda *_a: self.window.autosave_now())
+                GLib.timeout_add_seconds(15, self._check_updates)
             else:
                 self.window.present()
 
+        def _check_updates(self):
+            win = self.window
+            update.check_async(settings, lambda tag, url: GLib.idle_add(
+                win.new_version_available, tag, url))
+            return False
+
     app = KalemApp()
-    return app.run([argv[0]])
+
+    def on_term(*_a):
+        # Tahta kapatılırken / oturum sonlanırken dersi kaydet
+        if app.window is not None:
+            log.info("Sonlandırma sinyali: otomatik kayıt")
+            app.window.autosave_now()
+        app.quit()
+        return False
+
+    for sig in (signal.SIGTERM, signal.SIGHUP, signal.SIGINT):
+        GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, sig, on_term)
+    return app.run(argv)
 
 
 if __name__ == "__main__":

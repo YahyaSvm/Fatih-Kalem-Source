@@ -24,15 +24,18 @@ gi.require_version("Gdk", "3.0")
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gdk, GLib, Gtk  # noqa: E402
 
-from . import papers, resources as res  # noqa: E402
+from . import i18n, papers, render, resources as res  # noqa: E402
 from . import styles as st  # noqa: E402
+from . import tools as tl  # noqa: E402
 from .config import MAX_FAVOURITES, hex_to_rgb, rgb_to_hex  # noqa: E402
+from .features import FeaturesMixin, _union  # noqa: E402
+from .i18n import _  # noqa: E402
 from .ink import (Eraser, Stroke, densify, draw_segments,  # noqa: E402
                   interpolate_centers, render_strokes)
-from .scene import History, LibraryItem  # noqa: E402
-from .toolbar import (BORDER_W, BORDER_X, BORDER_Y, FRAME_BLUE,  # noqa: E402
-                      MINIMIZED_HEIGHT, ORANGE, SUBMENU_ACTIONS, Toolbar,
-                      expanded_height, favourite_tag_for)
+from .scene import Book, LibraryItem  # noqa: E402
+from .toolbar import (FRAME_BLUE, MINIMIZED_HEIGHT, ORANGE,  # noqa: E402
+                      SUBMENU_ACTIONS, Toolbar, expanded_height,
+                      favourite_tag_for, tools_submenu_action)
 
 LONG_PRESS_MS = 650
 GESTURE_RADIUS = 125.0
@@ -54,31 +57,31 @@ class Mover:
         k = self.decay ** dt
         self.vx *= k
         self.vy *= k
-        toolbar.x += self.vx * dt
-        toolbar.y += self.vy * dt
-        bx = toolbar.x + BORDER_X
-        by = toolbar.y + BORDER_Y
-        bh = toolbar.border_height()
+        bx, by = toolbar.border_pos()
+        bx += self.vx * dt
+        by += self.vy * dt
+        bw, bh = toolbar.border_width(), toolbar.border_height()
         if bx < 0:
-            toolbar.x = -BORDER_X
+            bx = 0
             self.vx = abs(self.vx)
-        elif bx + BORDER_W > width:
-            toolbar.x = width - BORDER_X - BORDER_W
+        elif bx + bw > width:
+            bx = width - bw
             self.vx = -abs(self.vx)
         if by < 0:
-            toolbar.y = -BORDER_Y
+            by = 0
             self.vy = abs(self.vy)
         elif by + bh > height:
-            toolbar.y = height - BORDER_Y - bh
+            by = height - bh
             self.vy = -abs(self.vy)
+        toolbar.set_border_pos(bx, by)
         return abs(self.vx) > 0.01 or abs(self.vy) > 0.01
 
 
-class KalemWindow(Gtk.Window):
+class KalemWindow(FeaturesMixin, Gtk.Window):
     def __init__(self, application, settings, monitor_index=None):
         super().__init__(application=application, title="Fatih Kalem")
         self.settings = settings
-        self.history = History()
+        self.book = Book()                               # çok sayfalı tahta
 
         # ---- durum (orijinal alan adları yorumda) ----
         self.pen_style = settings["PenStyle"]            # PenStyle
@@ -95,6 +98,10 @@ class KalemWindow(Gtk.Window):
         self.submenu_left = False                        # isLeftSubMenu
         self.favourites = list(settings["Favourites"])
         self.gesture_enabled = settings["isGestureEnabled"]
+        self.menu_scale = settings["MenuScale"]
+        self.submenu_side = settings["SubmenuSide"]
+        st.set_colorblind(settings["ColorBlindPalette"])
+        self.W, self.H = 1, 1
 
         self.toolbar = Toolbar(self)
         self.mover = None
@@ -135,7 +142,13 @@ class KalemWindow(Gtk.Window):
         self.base = None            # sahne önbelleği
         self.live_surface = None
         self._image_cache = {}
+        self._init_features()
         self._setup_window(monitor_index)
+
+    @property
+    def history(self):
+        """Geçerli sayfanın geri al / yinele geçmişi."""
+        return self.book.current
 
     # ================================================================ kurulum
     def _setup_window(self, monitor_index):
@@ -172,18 +185,27 @@ class KalemWindow(Gtk.Window):
         self.connect("realize", lambda *_: self._after_realize())
         self.connect("delete-event", self._on_delete)
 
-    def _monitor(self):
+    def _monitor_area(self):
+        """Seçilen ekranın çalışma alanı; -2 ise tüm ekranların birleşimi."""
         display = Gdk.Display.get_default()
-        mon = None
-        if self.monitor_index is not None:
-            mon = display.get_monitor(self.monitor_index)
+        idx = self.monitor_index if self.monitor_index is not None else self.settings["Monitor"]
+        count = display.get_n_monitors()
+        if idx == -2 and count > 1:
+            rects = [display.get_monitor(i).get_workarea() for i in range(count)]
+            area = Gdk.Rectangle()
+            area.x = min(r.x for r in rects)
+            area.y = min(r.y for r in rects)
+            area.width = max(r.x + r.width for r in rects) - area.x
+            area.height = max(r.y + r.height for r in rects) - area.y
+            return area
+        mon = display.get_monitor(idx) if 0 <= idx < count else None
         if mon is None:
             mon = display.get_primary_monitor() or display.get_monitor(0)
-        return mon
+        return mon.get_workarea()
 
     def _fit_to_monitor(self):
         """SetWindowSize: pencere çalışma alanını (panel hariç) kaplar."""
-        area = self._monitor().get_workarea()
+        area = self._monitor_area()
         self.area = area
         self.W, self.H = area.width, area.height
         self.move(area.x, area.y)
@@ -207,11 +229,10 @@ class KalemWindow(Gtk.Window):
     def _place_toolbar_at_start(self):
         s = self.settings
         if s["isStartupPositionDefault"]:
-            self.toolbar.x = -BORDER_X + 8
-            self.toolbar.y = (self.H - expanded_height(len(self.favourites))) / 3.0 - BORDER_Y
+            h = self.menu_scale * expanded_height(len(self.favourites))
+            self.toolbar.set_border_pos(8, (self.H - h) / 3.0)
         else:
-            self.toolbar.x = s["Left"] - BORDER_X
-            self.toolbar.y = s["Top"] - BORDER_Y
+            self.toolbar.set_border_pos(s["Left"], s["Top"])
         self.toolbar.clamp(self.W, self.H)
 
     def _on_composited_changed(self, screen):
@@ -240,6 +261,8 @@ class KalemWindow(Gtk.Window):
             return "eraser"
         if self.draw_state in st.SHAPES:
             return "shape"
+        if self.draw_state in st.TOOL_STATES:
+            return "tools"
         return None
 
     def fav_image(self, tag):
@@ -256,7 +279,8 @@ class KalemWindow(Gtk.Window):
             return False
         if self.draw_state == st.NOPEN:
             return (self.curtain_sel is not None or self.lib_item is not None
-                    or self.gesture is not None)
+                    or self.gesture is not None
+                    or any(o.takes_input_everywhere for o in self.overlays))
         return True
 
     def _side_arrow_rects(self):
@@ -289,6 +313,7 @@ class KalemWindow(Gtk.Window):
             return
         rects = list(self.toolbar.bounds())
         rects += [(x, y, w, h) for _, x, y, w, h in self._side_arrow_rects()]
+        rects += self.overlay_input_rects()
         region = cairo.Region()
         for x, y, w, h in rects:
             region.union(cairo.RectangleInt(int(x), int(y), int(math.ceil(w)), int(math.ceil(h))))
@@ -308,6 +333,8 @@ class KalemWindow(Gtk.Window):
         cr.set_antialias(cairo.ANTIALIAS_NONE)
         if not self.history.scene.is_empty():
             self._render_scene(cr)
+        if self.overlays:
+            self.draw_overlays(cr)
         self.toolbar.draw(cr)
         for side, x, y, w, h in self._side_arrow_rects():
             res.paint(cr, "sidearrow" + side, x, y)
@@ -382,24 +409,8 @@ class KalemWindow(Gtk.Window):
         cr.restore()
 
     def _render_scene(self, cr, clip=None):
-        sc = self.history.scene
-        if clip is not None:
-            cr.rectangle(*clip)
-            cr.clip()
-        for path in sc.backgrounds[-1:]:
-            surf = self._load_picture(path)
-            if surf is not None:
-                cr.save()
-                cr.scale(self.W / surf.get_width(), self.H / surf.get_height())
-                cr.set_source_surface(surf, 0, 0)
-                cr.get_source().set_filter(cairo.FILTER_GOOD)
-                cr.paint()
-                cr.restore()
-        if sc.curtain is not None:
-            self._draw_curtain(cr, sc.curtain, placed=True)
-        for item in sc.library:
-            self._paint_library_item(cr, item)
-        render_strokes(cr, sc.strokes, clip)
+        render.render_scene(cr, self.history.scene, self.W, self.H,
+                            self._load_picture, clip)
 
     def _draw_curtain(self, cr, rect, placed):
         cr.save()
@@ -437,6 +448,7 @@ class KalemWindow(Gtk.Window):
         self._render_scene(cr, clip)
 
     def scene_changed(self, dirty=None):
+        self._dirty = True
         self._rebuild_base(dirty)
         if not self.composited and not self.wants_full_input():
             self._update_input_shape()
@@ -475,8 +487,17 @@ class KalemWindow(Gtk.Window):
         if self.preview:
             render_strokes(cr, self.preview)
 
+        if self.vanishing:
+            self.draw_vanishing(cr)
+
         if self.lib_item is not None:
             self._draw_library_editor(cr)
+
+        if self.overlays:
+            self.draw_overlays(cr)
+        self.draw_selection(cr)
+        if self.laser.points:
+            self.laser.draw(cr)
 
         if self.gesture is not None:
             self._draw_gesture(cr)
@@ -494,6 +515,9 @@ class KalemWindow(Gtk.Window):
             cr.set_source_rgba(0.3, 0.3, 0.3, 0.9)
             cr.set_line_width(1)
             cr.stroke()
+
+        if self.overlays:
+            self.draw_overlays(cr, top=True)
 
         if not self.minimized and self.draw_state != st.NOPEN:
             cr.set_source_rgb(*FRAME_BLUE)       # rectFrame
@@ -706,6 +730,11 @@ class KalemWindow(Gtk.Window):
             self.press_target = ("submenu",) + sub
             self._start_long_press(("submenu",) + sub)
             return
+        if self.overlays and self.overlay_press(x, y):
+            if self.shown_submenu:
+                self.collapse_submenus()
+            self.press_target = ("overlay",)
+            return
         if self.minimized:
             self.press_target = None
             return
@@ -724,8 +753,18 @@ class KalemWindow(Gtk.Window):
             self.state_before = state
             state = st.ERASER
             self._eraser_tip_restore = True
-        if state == st.PEN:
+        if state in (st.PEN, st.VANISH):
             self._begin_stroke(x, y, pressure)
+        elif state == st.LASER:
+            self.laser_point(x, y)
+        elif state == st.SELECT:
+            self.select_press(x, y)
+        elif state == st.TEXT:
+            self.press_target = None
+            self.text_press(x, y)
+        elif state == st.FILL:
+            self.press_target = None
+            self.fill_at(x, y)
         elif state == st.ERASER:
             self._begin_erase(x, y)
         elif state in st.SHAPES:
@@ -742,6 +781,15 @@ class KalemWindow(Gtk.Window):
             return
         if self.lib_mode is not None:
             self._library_move(x, y)
+            return
+        if self.press_target and self.press_target[0] == "overlay":
+            self.overlay_move(x, y)
+            return
+        if self.draw_state == st.LASER and self.press_target:
+            self.laser_point(x, y)
+            return
+        if self.draw_state == st.SELECT and self.sel_mode:
+            self.select_move(x, y)
             return
         if self.live is not None:
             self._extend_stroke(x, y, pressure)
@@ -779,7 +827,13 @@ class KalemWindow(Gtk.Window):
             if sub is not None and sub[0] == target[1]:
                 self.submenu_clicked(*sub)
             return
+        if target[0] == "overlay":
+            self.overlay_release(x, y)
+            return
         # tuval
+        if self.draw_state == st.SELECT and self.sel_mode:
+            self.select_release(x, y)
+            return
         if self.lib_mode is not None:
             self.lib_mode = None
             self.lib_grab = None
@@ -849,6 +903,7 @@ class KalemWindow(Gtk.Window):
 
     # ================================================================ çizim
     def _begin_stroke(self, x, y, pressure):
+        x, y = self._snap_start(x, y)
         w, h, tip, rot, hl = st.pen_attributes(self.pen_style, self.ink_size)
         self.live = Stroke([(x, y, pressure)], self.ink_rgb, w, h, tip, rot, hl)
         self.live_drawn = 0
@@ -860,6 +915,7 @@ class KalemWindow(Gtk.Window):
         self._draw_live_tail()
 
     def _extend_stroke(self, x, y, pressure):
+        x, y = self._snapped(x, y)
         last = self.live.points[-1]
         if abs(last[0] - x) < 0.5 and abs(last[1] - y) < 0.5:
             return
@@ -886,9 +942,18 @@ class KalemWindow(Gtk.Window):
     def _end_stroke(self):
         s = self.live
         self.live = None
+        if self.draw_state == st.VANISH:
+            self.snap_edge = None
+            self.add_vanishing(s)
+            self._queue_bbox(s.bbox())
+            return
+        strokes = self._finish_stroke(s)
         sc = self.history.scene
-        self.history.commit(sc.replace(strokes=sc.strokes + (s,)))
-        self.scene_changed(s.bbox())
+        self.history.commit(sc.replace(strokes=sc.strokes + tuple(strokes)))
+        dirty = s.bbox()
+        for part in strokes:
+            dirty = _union(dirty, part.bbox())
+        self.scene_changed(dirty)
 
     def cancel_live(self):
         if self.live is not None:
@@ -915,8 +980,19 @@ class KalemWindow(Gtk.Window):
         self.eraser_cursor = (x, y)
         sc = self.history.scene
         strokes, changed, dirty = self.eraser.erase(sc.strokes, centers)
+        texts = list(sc.texts)
+        if texts:
+            keep = []
+            for t_ in texts:
+                x0, y0, x1, y1 = render.text_bbox(t_)
+                if any(x0 <= cx <= x1 and y0 <= cy <= y1 for cx, cy in centers):
+                    changed = True
+                    dirty = _union(dirty, (x0, y0, x1, y1))
+                else:
+                    keep.append(t_)
+            texts = keep
         if changed:
-            self.history.set_without_history(sc.replace(strokes=strokes))
+            self.history.set_without_history(sc.replace(strokes=strokes, texts=texts))
             self._rebuild_base(dirty)
         r = self.eraser.reach() + 4
         for c in filter(None, (old_cursor, (x, y))):
@@ -931,6 +1007,7 @@ class KalemWindow(Gtk.Window):
         if after is not self.erase_before:
             self.history.set_without_history(self.erase_before)
             self.history.commit(after)
+            self._dirty = True
         self.erase_before = None
         self.eraser_cursor = None
         self.last_eraser_pt = None
@@ -1049,12 +1126,12 @@ class KalemWindow(Gtk.Window):
             return test_pick
         dlg = Gtk.FileChooserDialog(title=title, transient_for=self,
                                     action=Gtk.FileChooserAction.OPEN)
-        dlg.add_buttons("_Vazgeç", Gtk.ResponseType.CANCEL,
-                        "_Aç", Gtk.ResponseType.ACCEPT)
+        dlg.add_buttons(_("Vazgeç"), Gtk.ResponseType.CANCEL,
+                        _("Aç"), Gtk.ResponseType.ACCEPT)
         dlg.set_keep_above(True)
         dlg.set_modal(True)
         flt = Gtk.FileFilter()
-        flt.set_name("Resim Dosyaları")
+        flt.set_name(_("Resim Dosyaları"))
         for pat in ("*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp", "*.tif",
                     "*.tiff", "*.svg", "*.webp"):
             flt.add_pattern(pat)
@@ -1100,7 +1177,7 @@ class KalemWindow(Gtk.Window):
         self.collapse_submenus()
         self.place_library_item()
         folder = papers.ensure_papers(self.W, self.H)
-        path = self._choose_image("Arka Plan Sayfası Seç", folder)
+        path = self._choose_image(_("Arka Plan Sayfası Seç"), folder)
         if not path or self._load_picture(path) is None:
             return
         sc = self.history.scene
@@ -1112,7 +1189,7 @@ class KalemWindow(Gtk.Window):
         self.place_library_item()
         dirs = papers.library_dirs()
         from .system import default_pictures_dir
-        path = self._choose_image("Görsel Seç", dirs[0] if dirs else default_pictures_dir())
+        path = self._choose_image(_("Görsel Seç"), dirs[0] if dirs else default_pictures_dir())
         if not path:
             return
         surf = self._load_picture(path)
@@ -1226,10 +1303,9 @@ class KalemWindow(Gtk.Window):
             # Kısa çekme: menüyü parmağın yanına getir.
             if self.settings["isShortGestureEnabled"] and g.get("opacity", 0) > 0.05:
                 bh = self.toolbar.border_height()
-                tx = sx + BORDER_W / 2.0
+                tx = sx + self.toolbar.border_width() / 2.0
                 ty = sy - bh / 2.0
-                bx = self.toolbar.x + BORDER_X
-                by = self.toolbar.y + BORDER_Y
+                bx, by = self.toolbar.border_pos()
                 self._start_mover(4.9 * (tx - bx) / 1920.0, 4.9 * (ty - by) / 1920.0, 0.9976)
             return
         targets = self._gesture_targets()
@@ -1332,11 +1408,11 @@ class KalemWindow(Gtk.Window):
             self.queue_draw()
             return
         self.last_side_click = now
-        bx = self.toolbar.x + BORDER_X
+        bx, _by = self.toolbar.border_pos()
         if side == "left":
             target = 0.0
         else:
-            target = self.W - BORDER_W
+            target = self.W - self.toolbar.border_width()
         self._start_mover(4.9 * (target - bx) / 1920.0, 0.0, 0.9976)
 
     def collapse_submenus(self):
@@ -1359,9 +1435,10 @@ class KalemWindow(Gtk.Window):
                 self.draw_state = st.PEN
             self.activate_pen()
             self.toolbar.clamp(self.W, self.H)
+            bx, by = self.toolbar.border_pos()
             bh = self.toolbar.border_height()
-            if self.toolbar.y + BORDER_Y + bh + 10 > self.H:
-                self.toolbar.y = self.H - bh - 10 - BORDER_Y
+            if by + bh + 10 > self.H:
+                self.toolbar.set_border_pos(bx, max(0, self.H - bh - 10))
             self.backdrop = None
             self.present()
         else:
@@ -1370,10 +1447,13 @@ class KalemWindow(Gtk.Window):
             self.place_library_item()
             self.gesture = None
             self.curtain_sel = None
-            if not self.first_run and not self.history.scene.is_empty():
-                # ClearCanvas: geri alınabilir şekilde temizle.
-                self.history.commit(self.history.scene.replace(
-                    strokes=(), backgrounds=(), library=(), curtain=None))
+            self.clear_selection()
+            self.overlays = [o for o in self.overlays if isinstance(o, tl.TimerWidget)]
+            if not self.first_run and not self.book.is_empty():
+                # ClearCanvas: önce otomatik kaydet ("Ders aç" ile geri gelir).
+                self.autosave_now()
+                self.book.reset()
+                self.base = None
             self.minimized = True
             self.scene_changed()
         self.first_run = False
@@ -1407,6 +1487,13 @@ class KalemWindow(Gtk.Window):
                 self.collapse_submenus()
                 return
             self._show_submenu("shape")
+        elif name == "tools":
+            self.cancel_triangle()
+            if self.shown_submenu == "tools":
+                self.collapse_submenus()
+                return
+            self.collapse_submenus()
+            self._show_submenu("tools")
         elif name == "settings":
             self.collapse_submenus()
             self.open_settings()
@@ -1425,6 +1512,11 @@ class KalemWindow(Gtk.Window):
                 self.run_favourite(self.favourites[idx])
 
     def submenu_clicked(self, name, x, y):
+        if name == "tools":
+            action = tools_submenu_action(self.toolbar, x, y)
+            if action is not None:
+                self.perform_tool(action[0])
+            return
         action = SUBMENU_ACTIONS[name](x, y)
         if action is None:
             return
@@ -1484,6 +1576,7 @@ class KalemWindow(Gtk.Window):
         elif submenu == "color":
             if kind == "cartela":
                 self.custom_rgb = tuple(c / 255.0 for c in val)
+                self.remember_color(self.custom_rgb)
                 self.pen_style = self.active_tab
                 self.color_no = 7
                 self.activate_pen()
@@ -1505,13 +1598,20 @@ class KalemWindow(Gtk.Window):
                 self.queue_draw()
             return
         _, name, x, y = what
-        action = SUBMENU_ACTIONS[name](x, y)
+        if name == "tools":
+            action = tools_submenu_action(self.toolbar, x, y)
+            if action is not None and action[0].split(":")[0] in ("recent", "palette") \
+                    and action[0] != "palette:add":
+                self.remove_palette_color(action[0])
+                return
+        else:
+            action = SUBMENU_ACTIONS[name](x, y)
         if action is None:
             return
         tag = favourite_tag_for(name, action, self.active_tab)
         if not tag or tag in self.favourites or len(self.favourites) >= MAX_FAVOURITES:
             return
-        bh = expanded_height(len(self.favourites) + 1)
+        bh = self.menu_scale * expanded_height(len(self.favourites) + 1)
         if bh > self.H:
             return
         self.favourites.append(tag)
@@ -1523,6 +1623,9 @@ class KalemWindow(Gtk.Window):
 
     def run_favourite(self, tag):
         self.collapse_submenus()
+        if tag.startswith("Tool:"):
+            self.perform_tool(tag[5:])
+            return
         if tag in ("Undo", "Redo", "Curtain"):
             self.perform("eraser", (tag.lower(), None), from_fav=True)
             return
@@ -1566,6 +1669,7 @@ class KalemWindow(Gtk.Window):
     def activate_pen(self):
         """ActivatePen"""
         self.place_library_item()
+        self.clear_selection()
         self.draw_state = st.PEN
         self.state_before = st.PEN
         self._update_input_shape()
@@ -1599,6 +1703,7 @@ class KalemWindow(Gtk.Window):
 
     def undo(self):
         self.cancel_triangle()
+        self.clear_selection()
         self.place_library_item()
         if self.history.undo():
             self.scene_changed()
@@ -1606,6 +1711,7 @@ class KalemWindow(Gtk.Window):
 
     def redo(self):
         self.cancel_triangle()
+        self.clear_selection()
         if self.history.redo():
             self.scene_changed()
         self.queue_draw()
@@ -1632,8 +1738,9 @@ class KalemWindow(Gtk.Window):
     def save_current_position(self):
         s = self.settings
         s["isStartupPositionDefault"] = False
-        s["Left"] = int(round(self.toolbar.x + BORDER_X))
-        s["Top"] = int(round(self.toolbar.y + BORDER_Y))
+        bx, by = self.toolbar.border_pos()
+        s["Left"] = int(round(bx))
+        s["Top"] = int(round(by))
         s.save()
 
     def favourites_changed(self):
@@ -1643,7 +1750,13 @@ class KalemWindow(Gtk.Window):
         self.queue_draw()
 
     def settings_changed(self):
-        self.gesture_enabled = self.settings["isGestureEnabled"]
+        s = self.settings
+        self.gesture_enabled = s["isGestureEnabled"]
+        self.menu_scale = s["MenuScale"]
+        self.submenu_side = s["SubmenuSide"]
+        st.set_colorblind(s["ColorBlindPalette"])
+        i18n.set_language(s["Language"])
+        self.toolbar.clamp(self.W, self.H)
         self._update_input_shape()
         self.queue_draw()
 
@@ -1652,6 +1765,11 @@ class KalemWindow(Gtk.Window):
         """CloseMe: 200 ms'de solarak kapanır."""
         if self.fading is not None:
             return
+        if self._dirty and self.settings["Autosave"]:
+            self.autosave_now()
+        if self.share_server is not None:
+            self.share_server.stop()
+            self.share_server = None
         self.fading = 1.0
         t0 = time.monotonic()
 

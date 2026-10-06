@@ -15,6 +15,9 @@ MARKER, STYLOGRAPH, HIGHLIGHTER = 0, 1, 2
 PEN, ERASER, LINE, DASHLINE, ARROW, RECTANGLE, ELLIPSE, TRIANGLE, NOPEN, CURTAIN = (
     0, 1, 3, 4, 5, 6, 7, 8, 9, 10)
 SHAPES = (LINE, DASHLINE, ARROW, RECTANGLE, ELLIPSE, TRIANGLE)
+# 2.1 ile gelen araç kipleri
+SELECT, TEXT, LASER, VANISH, FILL = 11, 12, 13, 14, 15
+TOOL_STATES = (SELECT, TEXT, LASER, VANISH, FILL)
 
 STYLE_NAMES = {MARKER: "Marker", STYLOGRAPH: "Stylograph", HIGHLIGHTER: "Highlighter"}
 STYLE_TITLES = {MARKER: "Keçeli Kalem", STYLOGRAPH: "Dolma Kalem",
@@ -40,6 +43,23 @@ PALETTE = {
     HIGHLIGHTER: {1: _rgb(255, 0, 255), 2: _rgb(1, 255, 255), 3: _rgb(0, 255, 1),
                   4: _rgb(255, 255, 1), 5: _rgb(0, 0, 0), 6: _rgb(255, 255, 255)},
 }
+
+# Renk körlüğüne uygun palet (Okabe-Ito); renk numaraları aynı kalır.
+PALETTE_CB = {
+    MARKER: {1: _rgb(213, 94, 0), 2: _rgb(0, 114, 178), 3: _rgb(0, 158, 115),
+             4: _rgb(230, 159, 0), 5: _rgb(0, 0, 0), 6: _rgb(255, 255, 255)},
+    STYLOGRAPH: {1: _rgb(213, 94, 0), 2: _rgb(0, 114, 178), 3: _rgb(0, 158, 115),
+                 4: _rgb(230, 159, 0), 5: _rgb(20, 20, 20), 6: _rgb(255, 255, 255)},
+    HIGHLIGHTER: {1: _rgb(204, 121, 167), 2: _rgb(86, 180, 233), 3: _rgb(0, 158, 115),
+                  4: _rgb(240, 228, 66), 5: _rgb(0, 0, 0), 6: _rgb(255, 255, 255)},
+}
+_use_cb = False
+
+
+def set_colorblind(enabled):
+    global _use_cb
+    _use_cb = bool(enabled)
+
 
 # InkSize 1..6 -> (genişlik, yükseklik)
 INK_SIZES = {
@@ -79,7 +99,8 @@ def pen_attributes(style, ink_size):
 def color_for(style, color_no, custom_rgb):
     if color_no == 7 and custom_rgb is not None:
         return custom_rgb
-    return PALETTE[style].get(color_no, PALETTE[style][2])
+    pal = PALETTE_CB if _use_cb else PALETTE
+    return pal[style].get(color_no, pal[style][2])
 
 
 def pen_image_name(style, color_no, nopen=False):

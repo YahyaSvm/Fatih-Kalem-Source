@@ -20,6 +20,8 @@ install:
 	install -D -m 755 bin/fatih-kalem $(DESTDIR)$(PREFIX)/bin/fatih-kalem
 	install -D -m 644 data/fatih-kalem.desktop $(DESTDIR)$(PREFIX)/share/applications/fatih-kalem.desktop
 	install -D -m 644 data/tr.yhysvm.FatihKalem.metainfo.xml $(DESTDIR)$(PREFIX)/share/metainfo/tr.yhysvm.FatihKalem.metainfo.xml
+	install -D -m 644 data/fatih-kalem-mime.xml $(DESTDIR)$(PREFIX)/share/mime/packages/fatih-kalem.xml
+	install -D -m 644 data/ayarlar-ornek.json $(DESTDIR)$(PREFIX)/share/doc/fatih-kalem/ayarlar-ornek.json
 	for s in 16 24 32 48 256; do \
 		install -D -m 644 data/icons/$$s.png \
 			$(DESTDIR)$(PREFIX)/share/icons/hicolor/$${s}x$${s}/apps/fatih-kalem.png; \
@@ -31,6 +33,7 @@ uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/fatih-kalem
 	rm -f $(DESTDIR)$(PREFIX)/share/applications/fatih-kalem.desktop
 	rm -f $(DESTDIR)$(PREFIX)/share/metainfo/tr.yhysvm.FatihKalem.metainfo.xml
+	rm -f $(DESTDIR)$(PREFIX)/share/mime/packages/fatih-kalem.xml
 	for s in 16 24 32 48 256; do \
 		rm -f $(DESTDIR)$(PREFIX)/share/icons/hicolor/$${s}x$${s}/apps/fatih-kalem.png; \
 	done

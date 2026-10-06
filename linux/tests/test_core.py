@@ -216,9 +216,9 @@ def test_favourite_tags_match_original():
 
 
 def test_expanded_height_matches_original():
-    # Orijinal: 223 + iFav * 42 (+ alttaki imza satırı)
-    assert tb.expanded_height(0) == 223 + tb.BYLINE_HEIGHT
-    assert tb.expanded_height(3) == 223 + 126 + tb.BYLINE_HEIGHT
+    # İlk sürüm: 223 + iFav * 42; 2.1: + Araçlar düğmesi (42) + imza satırı
+    assert tb.expanded_height(0) == 223 + 42 + tb.BYLINE_HEIGHT
+    assert tb.expanded_height(3) == 223 + 42 + 126 + tb.BYLINE_HEIGHT
     assert tb.BYLINE_TEXT == "By YhySvm"
 
 

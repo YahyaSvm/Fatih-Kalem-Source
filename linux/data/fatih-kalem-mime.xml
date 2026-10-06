@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x-fatih-kalem">
+    <comment>Fatih Kalem dersi</comment>
+    <comment xml:lang="en">Fatih Kalem lesson</comment>
+    <sub-class-of type="application/zip"/>
+    <icon name="fatih-kalem"/>
+    <glob pattern="*.fkalem"/>
+  </mime-type>
+</mime-info>

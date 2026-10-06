@@ -1,0 +1,13 @@
+{
+  "_aciklama": "Okul / BT yöneticileri: bu dosyayı /etc/fatih-kalem/ayarlar.json olarak kopyalarsanız tüm öğretmen hesapları bu varsayılanlarla başlar. Öğretmenin kendi ayarları (~/.config/fatih-kalem/ayarlar.json) bunların üzerine yazılır.",
+  "PenStyle": 0,
+  "ColorNo": 1,
+  "InkSize": 3,
+  "isCloseConfirmationEnabled": true,
+  "isGestureEnabled": true,
+  "MenuScale": 1.25,
+  "Language": "tr",
+  "Autosave": true,
+  "CheckUpdates": true,
+  "Favourites": ["Undo", "Redo", "Tool:ruler", "Tool:laser"]
+}

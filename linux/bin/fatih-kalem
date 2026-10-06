@@ -11,9 +11,8 @@ if [ -n "$DISPLAY" ] && [ "$FATIHKALEM_NATIVE_WAYLAND" != "1" ]; then
     export GDK_BACKEND
 fi
 
-# Erişilebilirlik köprüsü ilk açılışı yavaşlatır; kalem için gerekmez.
-NO_AT_BRIDGE=1
-export NO_AT_BRIDGE
+# Not: Erişilebilirlik köprüsü (AT-SPI) kapatılmaz; ETAP ekran klavyesi metin
+# kutusuna dokunulduğunu bu köprü sayesinde anlar.
 
 PYTHONPATH="$PREFIX_SHARE${PYTHONPATH:+:$PYTHONPATH}"
 export PYTHONPATH
